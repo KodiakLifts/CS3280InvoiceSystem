@@ -24,10 +24,7 @@ namespace CS3280InvoiceSystem.Search
         /// Used for accessing business logic.
         /// </summary>
         clsSearchLogic logic;
-        /// <summary>
-        /// Used for accessing sql statements.
-        /// </summary>
-        clsSearchSQL sql;
+
         /// <summary>
         /// Currently displayed invoice in the data grid.
         /// </summary>
@@ -40,7 +37,6 @@ namespace CS3280InvoiceSystem.Search
         {
             InitializeComponent();
             logic = new clsSearchLogic();
-            sql = new clsSearchSQL();
             selectedInvoiceId = -1;
         }
 
@@ -58,9 +54,17 @@ namespace CS3280InvoiceSystem.Search
         /// </summary>
         public void updateSearchOptions()
         {
-            fill_cbInvoiceNumber(sql.getInvoiceNumbers());
-            fill_cbInvoiceDate(sql.getInvoiceDates());
-            fill_cbInvoiceTotalCharge(sql.getInvoiceTotalCharges());
+            try
+            {
+                fill_cbInvoiceNumber(logic.getInvoiceNumbers());
+                fill_cbInvoiceDate(logic.getInvoiceDates());
+                fill_cbInvoiceTotalCharge(logic.getInvoiceTotalCharges());
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                    MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -100,7 +104,6 @@ namespace CS3280InvoiceSystem.Search
                     MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
-
 
         /// <summary>
         /// Populate cbInvoiceDate items.
@@ -185,7 +188,7 @@ namespace CS3280InvoiceSystem.Search
                     Int32.TryParse(cbInvoiceTotalCharge.SelectedItem.ToString(), out total);
                 }
                 selectedInvoiceId = number;
-                dgridInvoiceList.DataContext = sql.searchInvoices(number, date, total);
+                dgridInvoiceList.DataContext = logic.searchInvoices(number, date, total);
             }
             catch (Exception ex)
             {
@@ -255,7 +258,5 @@ namespace CS3280InvoiceSystem.Search
                 System.IO.File.AppendAllText(@"C:\Error.txt", Environment.NewLine + "HandleError Exception: " + ex.Message);
             }
         }
-
-        
     }
 }

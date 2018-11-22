@@ -249,6 +249,37 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
+        /// Cancels search and hides window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            cbInvoiceNumber.SelectedIndex = -1;
+            cbInvoiceDate.SelectedIndex = -1;
+            cbInvoiceTotalCharge.SelectedIndex = -1;
+            dgridInvoiceList.DataContext = null;
+            selectedInvoiceId = -1;
+            this.Hide();
+        }
+
+        /// <summary>
+        /// Closing window does not destroy object instance.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            cbInvoiceNumber.SelectedIndex = -1;
+            cbInvoiceDate.SelectedIndex = -1;
+            cbInvoiceTotalCharge.SelectedIndex = -1;
+            dgridInvoiceList.DataContext = null;
+            selectedInvoiceId = -1;
+            this.Hide();
+        }
+
+        /// <summary>
         /// Handles errors.
         /// </summary>
         /// <param name="sClass"></param>
@@ -265,5 +296,7 @@ namespace CS3280InvoiceSystem.Search
                 System.IO.File.AppendAllText(@"C:\Error.txt", Environment.NewLine + "HandleError Exception: " + ex.Message);
             }
         }
+
+        
     }
 }

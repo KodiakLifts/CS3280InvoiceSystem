@@ -19,6 +19,7 @@
         <Button x:Name="btnSelectInvoice" Content="Select Invoice" HorizontalAlignment="Left" Margin="386,214,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Click="btnSelectInvoice_Click" IsEnabled="False"/>
         <Label x:Name="lblInvoices" Content="Invoices" HorizontalAlignment="Left" Margin="164,22,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblSearchCriteria" Content="Search Criteria" HorizontalAlignment="Left" Margin="1.282,22,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="386,320,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.01,0.382" Grid.ColumnSpan="2" Click="btnCancel_Click"/>
 
     </Grid>
 </Window>

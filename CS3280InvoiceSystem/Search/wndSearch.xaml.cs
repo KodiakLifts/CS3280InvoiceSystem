@@ -218,6 +218,13 @@ namespace CS3280InvoiceSystem.Search
         /// <param name="e"></param>
         private void cbInvoiceNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(cbInvoiceNumber.SelectedIndex != -1)
+            {
+                btnSelectInvoice.IsEnabled = true;
+            } else
+            {
+                btnSelectInvoice.IsEnabled = false;
+            }
             updateDataGrid();
         }
 

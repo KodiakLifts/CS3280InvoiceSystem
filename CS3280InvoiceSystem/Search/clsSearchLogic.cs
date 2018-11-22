@@ -36,6 +36,11 @@ namespace CS3280InvoiceSystem.Search
         {
             try
             {
+                if (number == -1 && date == null && total == -1)
+                {
+                    return null;
+                }
+
                 DataSet ds;
 
                 int iRet = 0;
@@ -62,7 +67,7 @@ namespace CS3280InvoiceSystem.Search
                     }
                     sql += ("TotalCost = " + total);
                 }
-
+                
                 ds = db.ExecuteSQLStatement(sql, ref iRet);
 
                 return ds.Tables[0];

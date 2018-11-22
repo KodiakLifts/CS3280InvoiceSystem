@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CS3280InvoiceSystem.Search"
         mc:Ignorable="d"
-        Title="Search" Height="469.149" Width="547.473" WindowStartupLocation="CenterScreen" Icon="SearchIcon.ico">
+        Title="Search" Height="469.149" Width="547.473" WindowStartupLocation="CenterScreen" Icon="SearchIcon.ico" ContentRendered="Search_ContentRendered">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="402*"/>
             <ColumnDefinition Width="137*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="dgridInvoiceList" HorizontalAlignment="Left" Height="356" Margin="28,53,0,0" VerticalAlignment="Top" Width="331"/>
-        <ComboBox x:Name="cmbInvoiceNumber" HorizontalAlignment="Left" Margin="386,53,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="cmbInvoiceDate" HorizontalAlignment="Left" Margin="386,105,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="cmbInvoiceTotalCharge" HorizontalAlignment="Left" Margin="386,158,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.502,2.37" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnClearSelection" Content="Clear Selection" HorizontalAlignment="Left" Margin="386,265,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnSelectInvoice" Content="Select Invoice" HorizontalAlignment="Left" Margin="386,214,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <DataGrid x:Name="dgridInvoiceList" HorizontalAlignment="Left" Height="356" Margin="28,53,0,0" VerticalAlignment="Top" Width="331" IsReadOnly="True" ItemsSource="{Binding }"/>
+        <ComboBox x:Name="cbInvoiceNumber" HorizontalAlignment="Left" Margin="386,53,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" SelectionChanged="cbInvoiceNumber_SelectionChanged"/>
+        <ComboBox x:Name="cbInvoiceDate" HorizontalAlignment="Left" Margin="386,105,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" SelectionChanged="cbInvoiceDate_SelectionChanged"/>
+        <ComboBox x:Name="cbInvoiceTotalCharge" HorizontalAlignment="Left" Margin="386,158,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.502,2.37" Grid.ColumnSpan="2" SelectionChanged="cbInvoiceTotalCharge_SelectionChanged"/>
+        <Button x:Name="btnClearSelection" Content="Clear Selection" HorizontalAlignment="Left" Margin="386,265,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Click="btnClearSelection_Click"/>
+        <Button x:Name="btnSelectInvoice" Content="Select Invoice" HorizontalAlignment="Left" Margin="386,214,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Click="btnSelectInvoice_Click"/>
         <Label x:Name="lblInvoices" Content="Invoices" HorizontalAlignment="Left" Margin="164,22,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblSearchCriteria" Content="Search Criteria" HorizontalAlignment="Left" Margin="1.282,22,0,0" VerticalAlignment="Top" Grid.Column="1"/>
 

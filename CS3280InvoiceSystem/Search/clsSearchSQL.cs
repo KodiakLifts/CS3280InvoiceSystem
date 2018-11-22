@@ -17,7 +17,7 @@ namespace CS3280InvoiceSystem.Search
         /// </summary>
         clsDataAccess db;
 
-        clsSearchSQL()
+        public clsSearchSQL()
         {
             db = new clsDataAccess();
         }
@@ -51,7 +51,8 @@ namespace CS3280InvoiceSystem.Search
                     {
                         sql += " AND ";
                     }
-                    sql += ("InvoiceDate = " + date);
+                    sql += ("InvoiceDate = #" + date + "#");
+                    Console.WriteLine(sql);
                 }
                 if(total != -1)
                 {
@@ -133,9 +134,11 @@ namespace CS3280InvoiceSystem.Search
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     string d;
+                    DateTime dt;
                     try
                     {
-                        d = dr[0].ToString();
+                        dt = (DateTime) dr[0];
+                        d = dt.ToString("M/dd/yyy");
                         invoiceDates.Add(d);
                     }
                     catch (Exception ex)

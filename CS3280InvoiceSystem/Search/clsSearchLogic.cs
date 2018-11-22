@@ -8,5 +8,14 @@ namespace CS3280InvoiceSystem.Search
 {
     class clsSearchLogic
     {
+        /// <summary>
+        /// Used for sql queries.
+        /// </summary>
+        clsSearchSQL sql;
+
+        public clsSearchLogic()
+        {
+            sql = new clsSearchSQL();
+        }
     }
 }

@@ -16,10 +16,24 @@ namespace CS3280InvoiceSystem.Search
         /// Used to access database.
         /// </summary>
         clsDataAccess db;
+        /// <summary>
+        /// Tells whether a single invoice is the result of the searchInvoices query.
+        /// </summary>
+        bool invoiceFound;
 
         public clsSearchLogic()
         {
             db = new clsDataAccess();
+            invoiceFound = false;
+        }
+
+        /// <summary>
+        /// Gets value of invoice found.
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool getInvoiceFound()
+        {
+            return invoiceFound;
         }
 
         /// <summary>
@@ -69,7 +83,14 @@ namespace CS3280InvoiceSystem.Search
                 }
                 
                 ds = db.ExecuteSQLStatement(sql, ref iRet);
-
+                if(ds.Tables[0].Rows.Count == 1)
+                {
+                    invoiceFound = true;
+                }
+                else
+                {
+                    invoiceFound = false;
+                }
                 return ds.Tables[0];
             }
             catch (Exception ex)

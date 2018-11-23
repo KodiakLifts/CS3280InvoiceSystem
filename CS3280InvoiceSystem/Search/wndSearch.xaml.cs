@@ -192,6 +192,7 @@ namespace CS3280InvoiceSystem.Search
                 if (logic.getInvoiceFound())
                 {
                     btnSelectInvoice.IsEnabled = true;
+                    selectedInvoiceId = logic.getSelectedInvoiceId();
                 } else
                 {
                     btnSelectInvoice.IsEnabled = false;

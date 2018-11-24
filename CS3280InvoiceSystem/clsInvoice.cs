@@ -49,6 +49,13 @@ namespace CS3280InvoiceSystem
             this.lItems = lItems;
         }
 
+        public clsInvoice(int iInvoiceNumber)
+        {
+            this.iInvoiceNumber = iInvoiceNumber;
+            this.iTotalCost = 0;
+            this.lItems = new ObservableCollection<clsItem>();
+        }
+
         public int IInvoiceNumber { get => iInvoiceNumber; set => iInvoiceNumber = value; }
         public DateTime DateInvoiceDate { get => dateInvoiceDate; set => dateInvoiceDate = value; }
         public int ITotalCost { get => iTotalCost; set => iTotalCost = value; }

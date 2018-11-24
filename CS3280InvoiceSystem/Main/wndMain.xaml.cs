@@ -24,7 +24,6 @@ namespace CS3280InvoiceSystem.Main
     public partial class wndMain : Window
     {
         #region Global Variables
-        clsMainSQL clsSql;
         /// <summary>
         /// A form to view and edit the Items.
         /// </summary>
@@ -33,18 +32,16 @@ namespace CS3280InvoiceSystem.Main
         /// A form to search for invoices.
         /// </summary>
         wndSearch wndSearchForm;
-        clsInvoice oInvoice;
         /// <summary>
-        /// The current invoice being edited
+        /// Contains the logic behind the UI
         /// </summary>
-        int iCurrentInvoice;
+        clsMainLogic oMainLogic;
         /// <summary>
         /// Tells whether it is a new invoice being created or an old one being selected
         /// </summary>
         bool bIsNewInvoice;
-
-        ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
         #endregion
+
 
         #region Methods
         /// <summary>
@@ -59,8 +56,7 @@ namespace CS3280InvoiceSystem.Main
             //Instantiate Window Objects
             wndItemsForm = new wndItems();
             wndSearchForm = new wndSearch();
-            clsSql = new clsMainSQL();
-            lItems = clsSql.getItems();
+            oMainLogic = new clsMainLogic();
         }
 
         /// <summary>
@@ -87,15 +83,61 @@ namespace CS3280InvoiceSystem.Main
         {
             this.Hide();
             wndSearchForm.ShowDialog();
-
-            //Retrieve information from search form
-            iCurrentInvoice = wndSearchForm.getSelectedInvoiceId();
+            //Populate the invoice with oldInvoice
             bIsNewInvoice = false;
-            populateInvoiceInfo();
+            updateUI();
             //Finished retreive
-
             this.Show();
         }
+
+
+        /// <summary>
+        /// Displays the cost of the item selected in the combo box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (var item in oMainLogic.LItems)
+            {
+                if (cbItems.SelectedItem.ToString() == item.SItemDesc)
+                {
+                    txtCost.Text = item.ICost.ToString();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add the item selected in the combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddItem_Click(object sender, RoutedEventArgs e)
+        {
+            //add the item from the combobox to the invoice
+            if (cbItems.SelectedItem != null)
+            {
+                oMainLogic.addItem(cbItems.SelectedItem.ToString());
+                resetUI();
+            }
+        }
+     
+        /// <summary>
+        /// Delete the item selected in the datagrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            //Delete the item from the combobox and the invoice
+            if (dgItemList.SelectedCells != null && dgItemList.SelectedIndex != -1)
+            {
+                var currentRowIndex = dgItemList.SelectedIndex;
+                oMainLogic.deleteItem(((clsItem)dgItemList.SelectedCells[currentRowIndex].Item).ILineItemNum.ToString());
+                resetUI();
+            }
+        }
+
 
         /// <summary>
         /// Creates a new Invoice. 
@@ -104,9 +146,18 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnCreateInvoice_Click(object sender, RoutedEventArgs e)
         {
-            //Setting currentinvoice to -1 signifies that a new invoice is being created instead of selected form the search form.
             bIsNewInvoice = true;
-            populateInvoiceInfo();
+            updateUI();
+        }
+
+        /// <summary>
+        /// Edit the invoice Information
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEditInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            enableUI();
         }
 
         /// <summary>
@@ -116,7 +167,7 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnSaveInvoice_Click(object sender, RoutedEventArgs e)
         {
-            if (dateInvoiceDate.SelectedDate != null && txtTotalCost.Text != "")
+            if (dateInvoiceDate.SelectedDate != null && txtTotalCost.Text != "0")
             {
                 MessageBox.Show("good");
                 //    DateTime InvoiceDate = dateInvoiceDate.SelectedDate.Value.Date;
@@ -132,6 +183,7 @@ namespace CS3280InvoiceSystem.Main
 
                 //    //Update Database
                 //    clsSql.updateDataBase(oInvoice);
+                disableUI();
             }
             else
             {
@@ -139,82 +191,106 @@ namespace CS3280InvoiceSystem.Main
             }
         }
 
+        /// <summary>
+        /// .Delete The current invoice
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDeleteInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            //delete object from database
+            //reset ui
+            bIsNewInvoice = true;
+            updateUI();
+            btnEditInvoice.IsEnabled = false;
+            btnDeleteInvoice.IsEnabled = false;
+            btnCreateInvoice.IsEnabled = true;
+            txtInvoiceNumber.Text = "";
+        }
+
 
         #region helperFunctions
         /// <summary>
-        /// Populates the Invoice UI information, Does not error check
+        /// Updates the UI and Invoice Information for new and old invoices.
         /// </summary>
         /// <param name="pInvoiceNumber"></param>
         /// <param name="pInvoiceDate"></param>
         /// <param name="pInvoiceTotal"></param>
         /// <param name="pItemCode"></param>
-        void populateInvoiceInfo()
+        void updateUI()
         {
             //Enable Editing for Invoice
+            enableUI();
+
+            //Populate the item combo box with item descriptions
+            cbItems.ItemsSource =  oMainLogic.LItemDesc;
+
+            //Set text box values for invoice if it not a New Invoice being created
+            if (!bIsNewInvoice)
+            {
+                oMainLogic.updateOldInvoice(wndSearchForm.getSelectedInvoiceId());
+            }
+            else
+            {
+                oMainLogic.updateNewInvoice();
+            }
+
+            //Fill UI
+            resetUI();
+        }
+
+        /// <summary>
+        /// Resets the info in the UI
+        /// </summary>
+        void resetUI()
+        {
+            txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
+            if (oMainLogic.OInvoice.DateInvoiceDate.ToShortDateString() == "1/1/0001")
+            {
+                dateInvoiceDate.SelectedDate = null;
+            }
+            else
+            {
+                dateInvoiceDate.SelectedDate = oMainLogic.OInvoice.DateInvoiceDate;
+            }
+                txtTotalCost.Text = oMainLogic.OInvoice.ITotalCost.ToString();
+            //Populate datagrid with items and prices
+            dgItemList.ItemsSource = oMainLogic.OInvoice.LItems;
+        }
+
+        /// <summary>
+        /// Enables the controls in the UI
+        /// </summary>
+        void enableUI()
+        {
             btnSaveInvoice.IsEnabled = true;
             cbItems.IsEnabled = true;
             dateInvoiceDate.IsEnabled = true;
             btnAddItem.IsEnabled = true;
             btnDeleteItem.IsEnabled = true;
+            cbItems.IsEnabled = true;
 
-            //Create lists to populate item combo box
-            ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
-            lItems = clsSql.getItems();
-            ObservableCollection<string> lItemDesc = new ObservableCollection<string>();
-            foreach (var item in lItems)
-            {
-                lItemDesc.Add(item.SItemDesc);
-            }
-            cbItems.ItemsSource = lItemDesc;
-
-            //Set text box values for invoice if it not a New Invoice being created
-            if (!bIsNewInvoice)
-            {
-                oInvoice = clsSql.getInvoiceInfo(iCurrentInvoice);
-                txtInvoiceNumber.Text = oInvoice.IInvoiceNumber.ToString();
-                dateInvoiceDate.SelectedDate = oInvoice.DateInvoiceDate;
-                txtTotalCost.Text = oInvoice.ITotalCost.ToString();
-                //Populate datagrid with items and prices
-                dgItemList.ItemsSource = oInvoice.LItems;
-            }
-            else
-            {
-                clearSelection();
-                iCurrentInvoice = clsSql.getMaxInvoice();
-                txtInvoiceNumber.Text = iCurrentInvoice.ToString();
-            }
+            btnEditInvoice.IsEnabled = false;
+            btnDeleteInvoice.IsEnabled = false;
         }
 
         /// <summary>
-        /// Clears the UI
+        /// Enables the controls in the UI
         /// </summary>
-        void clearSelection()
+        void disableUI()
         {
-            iCurrentInvoice = -1;
-            txtInvoiceNumber.Text = "";
-            dateInvoiceDate.SelectedDate = null;
-            txtTotalCost.Text = "";
-            //Populate datagrid with items and prices
-            dgItemList.ItemsSource = null;
+            btnSaveInvoice.IsEnabled = false;
+            cbItems.IsEnabled = false;
+            dateInvoiceDate.IsEnabled = false;
+            btnAddItem.IsEnabled = false;
+            btnDeleteItem.IsEnabled = false;
+            btnCreateInvoice.IsEnabled = false;
+            cbItems.IsEnabled = false;
+
+            btnEditInvoice.IsEnabled = true;
+            btnDeleteInvoice.IsEnabled = true;
         }
         #endregion
-
         #endregion
-
-        /// <summary>
-        /// Displays the cost of the item selected in the combo box
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void cbItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            foreach (var item in lItems)
-            {
-                if (cbItems.SelectedItem.ToString() == item.SItemDesc)
-                {
-                    txtCost.Text = item.ICost.ToString();
-                }
-            } 
-        }
     }
 }

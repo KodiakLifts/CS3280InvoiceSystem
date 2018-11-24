@@ -217,6 +217,7 @@ namespace CS3280InvoiceSystem.Search
             cbInvoiceTotalCharge.SelectedIndex = -1;
             dgridInvoiceList.DataContext = null;
             selectedInvoiceId = -1;
+            btnSelectInvoice.IsEnabled = false;
         }
 
         /// <summary>

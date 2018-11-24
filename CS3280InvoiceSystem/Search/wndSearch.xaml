@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CS3280InvoiceSystem.Search"
         mc:Ignorable="d"
-        Title="Search" Height="469.149" Width="547.473" WindowStartupLocation="CenterScreen" Icon="SearchIcon.ico" ContentRendered="Search_ContentRendered">
+        Title="Search" Height="469.149" Width="547.473" WindowStartupLocation="CenterScreen" Icon="SearchIcon.ico" ContentRendered="Search_ContentRendered" Closing="Search_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="402*"/>

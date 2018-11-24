@@ -84,8 +84,12 @@ namespace CS3280InvoiceSystem.Main
             this.Hide();
             wndSearchForm.ShowDialog();
             //Populate the invoice with oldInvoice
-            bIsNewInvoice = false;
-            updateUI();
+            if(wndSearchForm.getSelectedInvoiceId() != -1)
+            {
+                bIsNewInvoice = false;
+                updateUI();
+            }
+            
             //Finished retreive
             this.Show();
         }

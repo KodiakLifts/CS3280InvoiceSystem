@@ -22,6 +22,7 @@ namespace CS3280InvoiceSystem.Main
     public partial class wndMain : Window
     {
         #region Global Variables
+        clsMainSQL clsSql;
         /// <summary>
         /// A form to view and edit the Items.
         /// </summary>
@@ -30,10 +31,12 @@ namespace CS3280InvoiceSystem.Main
         /// A form to search for invoices.
         /// </summary>
         wndSearch wndSearchForm;
+        clsInvoice oInvoice;
         /// <summary>
         /// The current invoice being edited
         /// </summary>
         int iCurrentInvoice;
+        bool bIsNewInvoice;
         #endregion
 
         public wndMain()
@@ -45,6 +48,7 @@ namespace CS3280InvoiceSystem.Main
             //Instantiate Window Objects
             wndItemsForm = new wndItems();
             wndSearchForm = new wndSearch();
+            clsSql = new clsMainSQL();
         }
 
         /// <summary>
@@ -71,22 +75,60 @@ namespace CS3280InvoiceSystem.Main
         {
             this.Hide();
             wndSearchForm.ShowDialog();
-            //iCurrentInvoice = wndSearchForm.iSelectedInvoice;
-            //txtInvoiceNumber.Text = iCurrentInvoice.ToString();
+
+            //Retrieve information from search form
+            iCurrentInvoice = wndSearchForm.getSelectedInvoiceId();
+            bIsNewInvoice = false;
+            populateInvoiceInfo();
+            //Finished retreive
+
             this.Show();
         }
 
         private void btnCreateInvoice_Click(object sender, RoutedEventArgs e)
         {
-            txtInvoiceNumber.Text = "TBD";
+            //Setting currentinvoice to -1 signifies that a new invoice is being created instead of selected form the search form.
+            bIsNewInvoice = true;
+            populateInvoiceInfo();
         }
 
         private void btnSaveInvoice_Click(object sender, RoutedEventArgs e)
         {
-            int iInvoiceNumber; //will equal max invoice number.
             string sInvoiceDate = dateInvoiceDate.SelectedDate.Value.Date.ToShortDateString();
 
 
+        }
+
+        /// <summary>
+        /// Populates the Invoice UI information, Does not error check
+        /// </summary>
+        /// <param name="pInvoiceNumber"></param>
+        /// <param name="pInvoiceDate"></param>
+        /// <param name="pInvoiceTotal"></param>
+        /// <param name="pItemCode"></param>
+        void populateInvoiceInfo()
+        {
+            //Enable Editing for Invoice
+            btnSaveInvoice.IsEnabled = true;
+            cbItems.IsEnabled = true;
+            dateInvoiceDate.IsEnabled = true;
+            btnAddItem.IsEnabled = true;
+            btnDeleteItem.IsEnabled = true;
+
+            //Set text box values for invoice if it not a New Invoice being created
+            if (!bIsNewInvoice)
+            {
+                oInvoice = clsSql.getInvoiceInfo(iCurrentInvoice);
+                txtInvoiceNumber.Text = oInvoice.IInvoiceNumber.ToString();
+                dateInvoiceDate.SelectedDate = oInvoice.DateInvoiceDate;
+                txtTotalCost.Text = oInvoice.ITotalCost.ToString();
+                //Populate datagrid with items and prices
+                dgItemList.ItemsSource = clsSql.getItemsAndPrices(oInvoice.IInvoiceNumber).DefaultView;
+            }
+            else
+            {
+                txtInvoiceNumber.Text = "TBD";
+            }
         }
     }
 }

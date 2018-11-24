@@ -142,13 +142,5 @@ namespace CS3280InvoiceSystem.Main
             }
             return lItems;
         }
-
-        public void deleteItemFromInvoice(int invoiceId, int lineItemNumber)
-        {
-            sSqlStatement = "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceId +
-                " AND WHERE LineItemNum = " + lineItemNumber;
-
-            db.ExecuteNonQuery(sSqlStatement);
-        }
     }
 }

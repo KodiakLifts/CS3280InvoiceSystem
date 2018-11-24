@@ -217,6 +217,7 @@ namespace CS3280InvoiceSystem.Search
             cbInvoiceTotalCharge.SelectedIndex = -1;
             dgridInvoiceList.DataContext = null;
             selectedInvoiceId = -1;
+            btnSelectInvoice.IsEnabled = false;
         }
 
         /// <summary>
@@ -269,7 +270,7 @@ namespace CS3280InvoiceSystem.Search
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Search_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
             cbInvoiceNumber.SelectedIndex = -1;
@@ -298,6 +299,5 @@ namespace CS3280InvoiceSystem.Search
             }
         }
 
-        
     }
 }

@@ -121,5 +121,34 @@ namespace CS3280InvoiceSystem.Main
             }
             return lItems;
         }
+
+        public ObservableCollection<clsItem> getInvoiceItems(int invoiceId)
+        {
+            ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
+            sSqlStatement =
+                "SELECT L.LineItemNum, D.ItemCode, D.ItemDesc, D.Cost FROM ItemDesc AS D " +
+                "INNER JOIN LineItems AS L " +
+                "ON L.ItemCode = D.ItemCode " +
+                "WHERE L.InvoiceNum = " + invoiceId;
+            iRet = 0;
+            DataSet ds;
+
+            ds = db.ExecuteSQLStatement(sSqlStatement, ref iRet);
+            clsItem oItem;
+            for (int i = 0; i < iRet; i++)
+            {
+                oItem = new clsItem(Int32.Parse(ds.Tables[0].Rows[i][0].ToString()), ds.Tables[0].Rows[i][1].ToString(), ds.Tables[0].Rows[i][2].ToString(), Int32.Parse(ds.Tables[0].Rows[i][3].ToString()));
+                lItems.Add(oItem);
+            }
+            return lItems;
+        }
+
+        public void deleteItemFromInvoice(int invoiceId, int lineItemNumber)
+        {
+            sSqlStatement = "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceId +
+                " AND WHERE LineItemNum = " + lineItemNumber;
+
+            db.ExecuteNonQuery(sSqlStatement);
+        }
     }
 }

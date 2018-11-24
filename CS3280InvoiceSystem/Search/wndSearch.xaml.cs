@@ -42,6 +42,7 @@ namespace CS3280InvoiceSystem.Search
 
         /// <summary>
         /// Retrieve the ID of the most recently searched invoice.
+        /// Used by Main window to retrieve invoice information for the selected ID.
         /// </summary>
         /// <returns></returns>
         public int getSelectedInvoiceId()

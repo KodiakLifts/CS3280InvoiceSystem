@@ -15,14 +15,18 @@ namespace CS3280InvoiceSystem.Main
         private string sSqlStatement;
         int iRet = 0;
 
-        //returns a table with the items and their prices for a specific invoice
+        /// <summary>
+        /// returns a table with the items and their prices for a specific invoice
+        /// </summary>
+        /// <param name="pInvoiceNumber"></param>
+        /// <returns></returns>
         public DataTable getItemsAndPrices(int pInvoiceNumber)
         {
             //Local Variables
             DataSet ds;
             DataTable dt = new DataTable();
             iRet = 0;
-            sSqlStatement = @"SELECT ItemDesc.ItemDesc, Cost
+            sSqlStatement = @"SELECT LineItemNum, LineItems.ItemCode, ItemDesc.ItemDesc, Cost
                 FROM ItemDesc
                 INNER JOIN LineItems ON LineItems.ItemCode = ItemDesc.ItemCode
                 WHERE LineItems.InvoiceNum = " + pInvoiceNumber;
@@ -33,7 +37,11 @@ namespace CS3280InvoiceSystem.Main
             return ds.Tables[0];
         }
 
-        //returns a table with all the invoice information
+        /// <summary>
+        /// returns a table with all the invoice information
+        /// </summary>
+        /// <param name="pInvoiceNumber"></param>
+        /// <returns></returns>
         public clsInvoice getInvoiceInfo(int pInvoiceNumber)
         {
             //Local Variables
@@ -41,12 +49,77 @@ namespace CS3280InvoiceSystem.Main
             iRet = 0;
             sSqlStatement = @"SELECT InvoiceNum, InvoiceDate, TotalCost
             FROM Invoices
-            WHERE InvoiceNum = 5000";
+            WHERE InvoiceNum = " + pInvoiceNumber;
 
             //query the database for the items and prices
             ds = db.ExecuteSQLStatement(sSqlStatement, ref iRet);
             oInvoice = new clsInvoice(Int32.Parse(ds.Tables[0].Rows[0][0].ToString()), DateTime.Parse(ds.Tables[0].Rows[0][1].ToString()), Int32.Parse(ds.Tables[0].Rows[0][2].ToString()));
             return oInvoice;
+        }
+
+        /// <summary>
+        /// Gets the max invoice number
+        /// </summary>
+        /// <returns></returns>
+        public int getMaxInvoice()
+        {
+            //Local Variables
+            DataSet ds;
+            iRet = 0;
+            sSqlStatement = @"SELECT MAX(InvoiceNum)
+                FROM Invoices";
+
+            //query the database for the Max Invoice Number
+            ds = db.ExecuteSQLStatement(sSqlStatement, ref iRet);
+            return Int32.Parse(ds.Tables[0].Rows[0][0].ToString()) +1;
+        }
+
+        /// <summary>
+        /// Updates the Database With the new Invoice And Lineitem data
+        /// </summary>
+        /// <param name="oInvoice"></param>
+        public void updateDataBase(clsInvoice oInvoice)
+        {
+            //Delete all Old line items
+            foreach (var item in oInvoice.LItems)
+            {
+                db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
+                " AND LineItemNum = " + item.ILineItemNum);
+            }
+            //Delete Old Invoice
+            db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
+                + oInvoice.IInvoiceNumber);
+
+            //Add New Invoice
+            db.ExecuteNonQuery("INSERT INTO Invoices VALUES ("
+                + oInvoice.IInvoiceNumber + ","
+                + oInvoice.DateInvoiceDate + ","
+                + oInvoice.ITotalCost + ")");
+            //Add All New Line Items
+            foreach (var item in oInvoice.LItems)
+            {
+                db.ExecuteNonQuery("INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" +
+                    oInvoice.IInvoiceNumber + "," + item.ILineItemNum + "," + item.SItemCode +
+                    ")");
+
+            }
+        }
+
+        public ObservableCollection<clsItem> getItems()
+        {
+            ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
+            sSqlStatement = "SELECT * FROM ItemDesc";
+            iRet = 0;
+            DataSet ds;
+
+            ds = db.ExecuteSQLStatement(sSqlStatement, ref iRet);
+            clsItem oItem;
+            for (int i = 0; i < iRet; i++)
+            {
+                oItem = new clsItem(-1, ds.Tables[0].Rows[i][0].ToString(), ds.Tables[0].Rows[i][1].ToString(), Int32.Parse(ds.Tables[0].Rows[i][2].ToString()));
+                lItems.Add(oItem);
+            }
+            return lItems;
         }
     }
 }

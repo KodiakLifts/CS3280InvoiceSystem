@@ -228,6 +228,8 @@ namespace CS3280InvoiceSystem.Main
 
             //Populate the item combo box with item descriptions
             cbItems.ItemsSource =  oMainLogic.LItemDesc;
+            //Populate the delete items combo box from the database
+            //TODO populate based off of clsInvoice.
             if(wndSearchForm.getSelectedInvoiceId() != -1)
             {
                 cbDeleteItems.ItemsSource = oMainLogic.fillInvoiceItems(wndSearchForm.getSelectedInvoiceId());

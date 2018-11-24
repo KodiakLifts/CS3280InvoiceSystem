@@ -105,6 +105,23 @@ namespace CS3280InvoiceSystem.Main
             }
         }
 
+        public void deleteInvoice(clsInvoice oInvoice)
+        {
+            //Delete all Old line items
+            foreach (var item in oInvoice.LItems)
+            {
+                db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
+                " AND LineItemNum = " + item.ILineItemNum);
+            }
+            //Delete Old Invoice
+            db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
+                + oInvoice.IInvoiceNumber);
+            }
+
+        /// <summary>
+        /// returns a list of all items in the database
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<clsItem> getItems()
         {
             ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();

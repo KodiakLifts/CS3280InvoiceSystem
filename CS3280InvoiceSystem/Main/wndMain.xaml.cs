@@ -36,6 +36,7 @@ namespace CS3280InvoiceSystem.Main
         /// Contains the logic behind the UI
         /// </summary>
         clsMainLogic oMainLogic;
+        clsMainSQL oSQL;
         /// <summary>
         /// Tells whether it is a new invoice being created or an old one being selected
         /// </summary>
@@ -57,6 +58,7 @@ namespace CS3280InvoiceSystem.Main
             wndItemsForm = new wndItems();
             wndSearchForm = new wndSearch();
             oMainLogic = new clsMainLogic();
+            oSQL = new clsMainSQL();
         }
 
         /// <summary>
@@ -119,6 +121,7 @@ namespace CS3280InvoiceSystem.Main
             {
                 oMainLogic.addItem(cbItems.SelectedItem.ToString());
                 resetUI();
+
             }
         }
      
@@ -179,10 +182,10 @@ namespace CS3280InvoiceSystem.Main
                 //        lItems.Add((clsItem)item);
                 //    }
                 //    //Create Invoice Object with new Information
-                //    oInvoice = new clsInvoice(iCurrentInvoice, InvoiceDate, iTotalCost, lItems);
+                //    oMainLogic.OInvoice = new clsInvoice(iCurrentInvoice, InvoiceDate, iTotalCost, lItems);
 
                 //    //Update Database
-                //    clsSql.updateDataBase(oInvoice);
+                //    oSQL.updateDataBase(oInvoice);
                 disableUI();
             }
             else
@@ -198,7 +201,9 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnDeleteInvoice_Click(object sender, RoutedEventArgs e)
         {
-            //delete object from database
+            ////delete object from database
+            //oSQL.deleteInvoice(oMainLogic.OInvoice);
+            
             //reset ui
             bIsNewInvoice = true;
             updateUI();

@@ -95,10 +95,14 @@ namespace CS3280InvoiceSystem.Main
             {
                 if (item.SItemDesc == sItemDescription)
                 {
+                    //incrimient the line item number
                     iLineItemNumber++;
                     //add the item to the invoice
                     oInvoice.LItems.Add(item);
-                    item.ILineItemNum = iLineItemNumber;
+                    //set the total cost to the calculated total cost
+                    oInvoice.ITotalCost += item.ICost;
+                    //set the items lineitemnumber to the current lineitemnumber
+                    oInvoice.LItems[oInvoice.LItems.Count-1].ILineItemNum = iLineItemNumber;
                 }
             }
         }
@@ -106,15 +110,15 @@ namespace CS3280InvoiceSystem.Main
         public void deleteItem(string sLineitemNumber)
         {
             //find the item object with the given description
-            int count = 0;
-            foreach (var item in lItems)
+            foreach (var item in oInvoice.LItems)
             {
                 if (item.ILineItemNum.ToString() == sLineitemNumber)
                 {
+                    //set the total cost to the calculated total cost
+                    oInvoice.ITotalCost -= item.ICost;
                     //Delete item from invoice
-                    item.ILineItemNum = iLineItemNumber;
                     oInvoice.LItems.Remove(item);
-                    count++;
+                    return;
                 }
             }
         }

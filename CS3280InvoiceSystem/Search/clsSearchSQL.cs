@@ -13,16 +13,143 @@ namespace CS3280InvoiceSystem.Search
     class clsSearchSQL
     {
         /// <summary>
-        /// SQL statement for retrieving all Invoice Numbers.
+        /// Used to access database.
         /// </summary>
-        public static string getInvoiceNumbers = "SELECT InvoiceNum FROM Invoices";
+        clsDataAccess db;
+
+        public clsSearchSQL(){}
+
         /// <summary>
-        /// SQL statement for retrieving all Invoice Dates.
+        /// Queries database for all invoices that match the given InvoiceNumber, InvoiceDate, and TotalCost.
+        /// Set number to -1 if no number selected.
+        /// Set date to null if no date selected.
+        /// Set total to -1 if no total selected.
         /// </summary>
-        public static string getInvoiceDates = "SELECT InvoiceDate FROM Invoices";
+        /// <param name="number"></param>
+        /// <param name="date"></param>
+        /// <param name="total"></param>
+        /// <returns>Data table for DataGrid</returns>
+        public DataSet searchInvoices(int number, string date, int total)
+        {
+            try
+            {
+                if (number == -1 && date == null && total == -1)
+                {
+                    return null;
+                }
+
+                DataSet ds;
+
+                int iRet = 0;
+
+                string sql = "SELECT * FROM Invoices WHERE ";
+                if (number != -1)
+                {
+                    sql += ("InvoiceNum = " + number);
+                }
+                if (date != null)
+                {
+                    if (number != -1)
+                    {
+                        sql += " AND ";
+                    }
+                    sql += ("InvoiceDate = #" + date + "#");
+                    Console.WriteLine(sql);
+                }
+                if (total != -1)
+                {
+                    if (number != -1 || date != null)
+                    {
+                        sql += " AND ";
+                    }
+                    sql += ("TotalCost = " + total);
+                }
+
+                ds = db.ExecuteSQLStatement(sql, ref iRet);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         /// <summary>
-        /// SQL statement for retrieving all Invoice Total Costs.
+        /// Queries database for Invoice Numbers sorted numerically.
         /// </summary>
-        public static string getInvoiceTotals = "SELECT TotalCost FROM Invoices";        
+        /// <returns>List of int</returns>
+        public DataSet getInvoiceNumbers()
+        {
+            try
+            {
+                DataSet ds;
+
+                int iRet = 0;
+
+                
+
+                ds = db.ExecuteSQLStatement(
+                    "SELECT InvoiceNum FROM Invoices", ref iRet
+                );
+
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Queries database for all Invoice Dates sorted by date.
+        /// </summary>
+        /// <returns>List of DateTime</returns>
+        public DataSet getInvoiceDates()
+        {
+            try
+            {
+                DataSet ds;
+                int iRet = 0;
+
+                
+
+                ds = db.ExecuteSQLStatement(
+                    "SELECT InvoiceDate FROM Invoices", ref iRet
+                );
+
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Queries database for all Invoice Total Charges and sorts by ammount.
+        /// </summary>
+        /// <returns>List of int</returns>
+        public DataSet getInvoiceTotalCharges()
+        {
+            try
+            {
+                DataSet ds;
+                int iRet = 0;
+
+                ds = db.ExecuteSQLStatement(
+                    "SELECT TotalCost FROM Invoices", ref iRet
+                );
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+   
     }
 }

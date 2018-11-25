@@ -13,9 +13,9 @@ namespace CS3280InvoiceSystem.Search
     class clsSearchLogic
     {
         /// <summary>
-        /// Used to access database.
+        /// SQL class for executing queries to database.
         /// </summary>
-        clsDataAccess db;
+        clsSearchSQL sql;
         /// <summary>
         /// Tells whether a single invoice is the result of the searchInvoices query.
         /// </summary>
@@ -27,7 +27,7 @@ namespace CS3280InvoiceSystem.Search
 
         public clsSearchLogic()
         {
-            db = new clsDataAccess();
+            sql = new clsSearchSQL();
             invoiceFound = false;
             selectedInvoiceId = -1;
         }
@@ -51,7 +51,27 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
-        /// Queries database for all invoices that match the given InvoiceNumber, InvoiceDate, and TotalCost.
+        /// Returns all invoices as a DataTable
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllInvoices()
+        {
+            try
+            {
+                DataSet ds;
+                ds = sql.getAllInvoices();
+
+                return ds.Tables[0];
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Returns a data table containing all invoices that match given parameters.
         /// Set number to -1 if no number selected.
         /// Set date to null if no date selected.
         /// Set total to -1 if no total selected.
@@ -64,39 +84,10 @@ namespace CS3280InvoiceSystem.Search
         {
             try
             {
-                if (number == -1 && date == null && total == -1)
-                {
-                    return null;
-                }
-
                 DataSet ds;
 
-                int iRet = 0;
+                ds = sql.searchInvoices(number, date, total);
 
-                string sql = "SELECT * FROM Invoices WHERE ";
-                if (number != -1)
-                {
-                    sql += ("InvoiceNum = " + number);
-                }
-                if (date != null)
-                {
-                    if (number != -1)
-                    {
-                        sql += " AND ";
-                    }
-                    sql += ("InvoiceDate = #" + date + "#");
-                    Console.WriteLine(sql);
-                }
-                if (total != -1)
-                {
-                    if (number != -1 || date != null)
-                    {
-                        sql += " AND ";
-                    }
-                    sql += ("TotalCost = " + total);
-                }
-                
-                ds = db.ExecuteSQLStatement(sql, ref iRet);
                 if(ds.Tables[0].Rows.Count == 1)
                 {
                     invoiceFound = true;
@@ -116,7 +107,7 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
-        /// Queries database for Invoice Numbers sorted numerically.
+        /// Returns an ordered list of all invoice numbers.
         /// </summary>
         /// <returns>List of int</returns>
         public List<int> getInvoiceNumbers()
@@ -125,13 +116,9 @@ namespace CS3280InvoiceSystem.Search
             {
                 DataSet ds;
 
-                int iRet = 0;
+                ds = sql.getInvoiceNumbers();
 
                 List<int> invoiceNumbers = new List<int>();
-
-                ds = db.ExecuteSQLStatement(
-                    clsSearchSQL.getInvoiceNumbers, ref iRet
-                );
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -158,7 +145,7 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
-        /// Queries database for all Invoice Dates sorted by date.
+        /// Returns ordered list of all invoice dates.
         /// </summary>
         /// <returns>List of DateTime</returns>
         public List<string> getInvoiceDates()
@@ -166,13 +153,10 @@ namespace CS3280InvoiceSystem.Search
             try
             {
                 DataSet ds;
-                int iRet = 0;
 
                 List<string> invoiceDates = new List<string>();
 
-                ds = db.ExecuteSQLStatement(
-                    clsSearchSQL.getInvoiceDates, ref iRet
-                );
+                ds = sql.getInvoiceDates();
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -202,7 +186,7 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
-        /// Queries database for all Invoice Total Charges and sorts by ammount.
+        /// Returns an ordered list of all invoice total charges.
         /// </summary>
         /// <returns>List of int</returns>
         public List<int> getInvoiceTotalCharges()
@@ -210,13 +194,10 @@ namespace CS3280InvoiceSystem.Search
             try
             {
                 DataSet ds;
-                int iRet = 0;
 
                 List<int> invoiceTotals = new List<int>();
 
-                ds = db.ExecuteSQLStatement(
-                    clsSearchSQL.getInvoiceTotals, ref iRet
-                );
+                ds = sql.getInvoiceTotalCharges();
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {

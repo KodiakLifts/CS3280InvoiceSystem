@@ -38,6 +38,7 @@ namespace CS3280InvoiceSystem.Search
             InitializeComponent();
             logic = new clsSearchLogic();
             selectedInvoiceId = -1;
+            initializeDataGrid();
         }
 
         /// <summary>
@@ -78,6 +79,7 @@ namespace CS3280InvoiceSystem.Search
             try
             {
                 updateSearchOptions();
+                initializeDataGrid();
             }
             catch (Exception ex)
             {
@@ -167,6 +169,22 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
+        /// Initializes datagrid with all invoices.
+        /// </summary>
+        private void initializeDataGrid()
+        {
+            try
+            {
+                dgridInvoiceList.DataContext = logic.getAllInvoices();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                    MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Updates the data grid based on current search parameters.
         /// </summary>
         private void updateDataGrid()
@@ -189,7 +207,11 @@ namespace CS3280InvoiceSystem.Search
                     Int32.TryParse(cbInvoiceTotalCharge.SelectedItem.ToString(), out total);
                 }
                 selectedInvoiceId = number;
-                dgridInvoiceList.DataContext = logic.searchInvoices(number, date, total);
+                if(number != -1 || date != null || total != -1)
+                {
+                    dgridInvoiceList.DataContext = logic.searchInvoices(number, date, total);
+                }
+                
                 if (logic.getInvoiceFound())
                 {
                     btnSelectInvoice.IsEnabled = true;
@@ -216,7 +238,7 @@ namespace CS3280InvoiceSystem.Search
             cbInvoiceNumber.SelectedIndex = -1;
             cbInvoiceDate.SelectedIndex = -1;
             cbInvoiceTotalCharge.SelectedIndex = -1;
-            dgridInvoiceList.DataContext = null;
+            initializeDataGrid();
             selectedInvoiceId = -1;
             btnSelectInvoice.IsEnabled = false;
         }
@@ -261,7 +283,7 @@ namespace CS3280InvoiceSystem.Search
             cbInvoiceNumber.SelectedIndex = -1;
             cbInvoiceDate.SelectedIndex = -1;
             cbInvoiceTotalCharge.SelectedIndex = -1;
-            dgridInvoiceList.DataContext = null;
+            initializeDataGrid();
             selectedInvoiceId = -1;
             this.Hide();
         }
@@ -277,7 +299,7 @@ namespace CS3280InvoiceSystem.Search
             cbInvoiceNumber.SelectedIndex = -1;
             cbInvoiceDate.SelectedIndex = -1;
             cbInvoiceTotalCharge.SelectedIndex = -1;
-            dgridInvoiceList.DataContext = null;
+            initializeDataGrid();
             selectedInvoiceId = -1;
             this.Hide();
         }

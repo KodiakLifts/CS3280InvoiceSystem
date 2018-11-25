@@ -17,7 +17,35 @@ namespace CS3280InvoiceSystem.Search
         /// </summary>
         clsDataAccess db;
 
-        public clsSearchSQL(){}
+        public clsSearchSQL()
+        {
+            db = new clsDataAccess();
+        }
+
+        /// <summary>
+        /// Queries database for all invoices.
+        /// </summary>
+        /// <returns>DataSet</returns>
+        public DataSet getAllInvoices()
+        {
+            try
+            {
+                DataSet ds;
+
+                int iRet = 0;
+
+                ds = db.ExecuteSQLStatement(
+                    "SELECT * FROM Invoices", ref iRet
+                );
+
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         /// <summary>
         /// Queries database for all invoices that match the given InvoiceNumber, InvoiceDate, and TotalCost.
@@ -54,7 +82,6 @@ namespace CS3280InvoiceSystem.Search
                         sql += " AND ";
                     }
                     sql += ("InvoiceDate = #" + date + "#");
-                    Console.WriteLine(sql);
                 }
                 if (total != -1)
                 {
@@ -86,8 +113,6 @@ namespace CS3280InvoiceSystem.Search
                 DataSet ds;
 
                 int iRet = 0;
-
-                
 
                 ds = db.ExecuteSQLStatement(
                     "SELECT InvoiceNum FROM Invoices", ref iRet

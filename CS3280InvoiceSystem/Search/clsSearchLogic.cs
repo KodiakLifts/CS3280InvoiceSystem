@@ -51,6 +51,26 @@ namespace CS3280InvoiceSystem.Search
         }
 
         /// <summary>
+        /// Returns all invoices as a DataTable
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllInvoices()
+        {
+            try
+            {
+                DataSet ds;
+                ds = sql.getAllInvoices();
+
+                return ds.Tables[0];
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Returns a data table containing all invoices that match given parameters.
         /// Set number to -1 if no number selected.
         /// Set date to null if no date selected.
@@ -133,7 +153,6 @@ namespace CS3280InvoiceSystem.Search
             try
             {
                 DataSet ds;
-               
 
                 List<string> invoiceDates = new List<string>();
 

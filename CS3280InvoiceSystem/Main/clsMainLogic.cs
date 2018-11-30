@@ -22,7 +22,7 @@ namespace CS3280InvoiceSystem.Main
         /// <summary>
         /// A list of the item descriptions on current invoice
         /// </summary>
-        ObservableCollection<string> lInvoiceItems = new ObservableCollection<string>();
+        ObservableCollection<clsItem> lInvoiceItems = new ObservableCollection<clsItem>();
         /// <summary>
         /// The current invoice being edited
         /// </summary>
@@ -46,11 +46,11 @@ namespace CS3280InvoiceSystem.Main
             LItems = oSQL.getItems();
         }
 
-        public ObservableCollection<string> fillInvoiceItems(int invoiceId)
+        public ObservableCollection<clsItem> fillInvoiceItems(int invoiceId)
         {
             foreach (var item in oSQL.getInvoiceItems(invoiceId))
             {
-                LInvoiceItems.Add(item.SItemDesc);
+                LInvoiceItems.Add(item);
             }
             return LInvoiceItems;
         }
@@ -62,7 +62,7 @@ namespace CS3280InvoiceSystem.Main
         /// <summary>
         /// property to get and set the list of item descriptions on current invoice
         /// </summary>
-        public ObservableCollection<string> LInvoiceItems { get => lInvoiceItems; set => lInvoiceItems = value; }
+        public ObservableCollection<clsItem> LInvoiceItems { get => lInvoiceItems; set => lInvoiceItems = value; }
         /// <summary>
         /// property to get and set the current invoice number
         /// </summary>

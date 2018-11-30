@@ -86,8 +86,12 @@ namespace CS3280InvoiceSystem.Main
             this.Hide();
             wndSearchForm.ShowDialog();
             //Populate the invoice with oldInvoice
-            bIsNewInvoice = false;
-            updateUI();
+            if(wndSearchForm.getSelectedInvoiceId() != -1)
+            {
+                bIsNewInvoice = false;
+                updateUI();
+            }
+            
             //Finished retreive
             this.Show();
         }
@@ -229,6 +233,13 @@ namespace CS3280InvoiceSystem.Main
 
             //Populate the item combo box with item descriptions
             cbItems.ItemsSource =  oMainLogic.LItemDesc;
+            //Populate the delete items combo box from the database
+            //TODO populate based off of clsInvoice.
+            if(wndSearchForm.getSelectedInvoiceId() != -1)
+            {
+                cbDeleteItems.ItemsSource = oMainLogic.fillInvoiceItems(wndSearchForm.getSelectedInvoiceId());
+            }
+            
 
             //Set text box values for invoice if it not a New Invoice being created
             if (!bIsNewInvoice)

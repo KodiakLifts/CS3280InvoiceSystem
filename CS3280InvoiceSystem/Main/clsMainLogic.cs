@@ -20,10 +20,6 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         private ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
         /// <summary>
-        /// A list of the item descriptions
-        /// </summary>
-        ObservableCollection<string> lItemDesc = new ObservableCollection<string>();
-        /// <summary>
         /// A list of the item descriptions on current invoice
         /// </summary>
         ObservableCollection<string> lInvoiceItems = new ObservableCollection<string>();
@@ -48,16 +44,11 @@ namespace CS3280InvoiceSystem.Main
         public clsMainLogic()
         {
             LItems = oSQL.getItems();
-            //Fill Item desc list up
-            foreach (var item in LItems)
-            {
-                LItemDesc.Add(item.SItemDesc);
-            }
         }
 
         public ObservableCollection<string> fillInvoiceItems(int invoiceId)
         {
-            foreach(var item in oSQL.getInvoiceItems(invoiceId))
+            foreach (var item in oSQL.getInvoiceItems(invoiceId))
             {
                 LInvoiceItems.Add(item.SItemDesc);
             }
@@ -68,10 +59,6 @@ namespace CS3280InvoiceSystem.Main
         /// Property to get and set the list of items
         /// </summary>
         public ObservableCollection<clsItem> LItems { get => lItems; set => lItems = value; }
-        /// <summary>
-        /// property to get and set the list of item descriptions
-        /// </summary>
-        public ObservableCollection<string> LItemDesc { get => lItemDesc; set => lItemDesc = value; }
         /// <summary>
         /// property to get and set the list of item descriptions on current invoice
         /// </summary>
@@ -85,7 +72,7 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         public clsInvoice OInvoice { get => oInvoice; set => oInvoice = value; }
 
-        
+
         /// <summary>
         /// Updates the invoice with all the old invoice information
         /// </summary>
@@ -105,39 +92,31 @@ namespace CS3280InvoiceSystem.Main
             iLineItemNumber = 0;
         }
 
-        public void addItem(string sItemDescription)
+        public void addItem(clsItem oSelectedItem)
         {
-            //find the item object with the given description
-            foreach (var item in lItems)
-            {
-                if (item.SItemDesc == sItemDescription)
-                {
-                    //incrimient the line item number
-                    iLineItemNumber++;
-                    //add the item to the invoice
-                    oInvoice.LItems.Add(item);
-                    //set the total cost to the calculated total cost
-                    oInvoice.ITotalCost += item.ICost;
-                    //set the items lineitemnumber to the current lineitemnumber
-                    oInvoice.LItems[oInvoice.LItems.Count-1].ILineItemNum = iLineItemNumber;
-                }
-            }
+                //incrimient and set the line item number
+                iLineItemNumber++;
+
+
+                //This is changing every item in the invoices item list to ilineitemnumber? why?
+                oSelectedItem.ILineItemNum = iLineItemNumber;
+
+
+                //add the item to the invoice
+                oInvoice.LItems.Add(oSelectedItem);
+                //set the total cost to the calculated total cost
+                oInvoice.ITotalCost += oSelectedItem.ICost;
+                //set the items lineitemnumber to the current lineitemnumber
+                oInvoice.LItems[oInvoice.LItems.Count - 1].ILineItemNum = iLineItemNumber;
         }
 
-        public void deleteItem(string sLineitemNumber)
+        public void deleteItem(clsItem selectedItem)
         {
-            //find the item object with the given description
-            foreach (var item in oInvoice.LItems)
-            {
-                if (item.ILineItemNum.ToString() == sLineitemNumber)
-                {
                     //set the total cost to the calculated total cost
-                    oInvoice.ITotalCost -= item.ICost;
+                    oInvoice.ITotalCost -= selectedItem.ICost;
                     //Delete item from invoice
-                    oInvoice.LItems.Remove(item);
+                    oInvoice.LItems.Remove(selectedItem);
                     return;
-                }
-            }
         }
 
         #endregion

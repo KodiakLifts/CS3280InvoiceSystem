@@ -28,6 +28,11 @@ namespace CS3280InvoiceSystem
         public string SItemCode { get => sItemCode; set => sItemCode = value; }
         public string SItemDesc { get => sItemDesc; set => sItemDesc = value; }
         public int ICost { get => iCost; set => iCost = value; }
+
+        public override string ToString()
+        {
+            return sItemDesc.ToString();
+        }
         #endregion
     }
 }

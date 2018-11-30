@@ -36,7 +36,6 @@ namespace CS3280InvoiceSystem.Main
         /// Contains the logic behind the UI
         /// </summary>
         clsMainLogic oMainLogic;
-        clsMainSQL oSQL;
         /// <summary>
         /// Tells whether it is a new invoice being created or an old one being selected
         /// </summary>
@@ -58,7 +57,6 @@ namespace CS3280InvoiceSystem.Main
             wndItemsForm = new wndItems();
             wndSearchForm = new wndSearch();
             oMainLogic = new clsMainLogic();
-            oSQL = new clsMainSQL();
         }
 
         /// <summary>
@@ -123,9 +121,9 @@ namespace CS3280InvoiceSystem.Main
             //add the item from the combobox to the invoice
             if (cbItems.SelectedItem != null)
             {
-                oMainLogic.addItem(cbItems.SelectedItem.ToString());
+                clsItem selectedItem = (clsItem)cbItems.SelectedItem;
+                oMainLogic.addItem(selectedItem);
                 resetUI();
-
             }
         }
      
@@ -140,7 +138,8 @@ namespace CS3280InvoiceSystem.Main
             if (dgItemList.SelectedCells != null && dgItemList.SelectedIndex != -1)
             {
                 var currentRowIndex = dgItemList.SelectedIndex;
-                oMainLogic.deleteItem(((clsItem)dgItemList.SelectedCells[currentRowIndex].Item).ILineItemNum.ToString());
+                clsItem selectedItem = ((clsItem)dgItemList.SelectedCells[currentRowIndex].Item);
+                oMainLogic.deleteItem(selectedItem);
                 resetUI();
             }
         }
@@ -232,7 +231,7 @@ namespace CS3280InvoiceSystem.Main
             enableUI();
 
             //Populate the item combo box with item descriptions
-            cbItems.ItemsSource =  oMainLogic.LItemDesc;
+            cbItems.ItemsSource =  oMainLogic.LItems;
             //Populate the delete items combo box from the database
             //TODO populate based off of clsInvoice.
             if(wndSearchForm.getSelectedInvoiceId() != -1)

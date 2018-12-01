@@ -15,7 +15,7 @@ namespace CS3280InvoiceSystem
         private int iInvoiceNumber;
         private DateTime dateInvoiceDate;
         private int iTotalCost;
-        private List<clsItem> lItems = new List<clsItem>();
+        private ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
         
 
 
@@ -34,14 +34,14 @@ namespace CS3280InvoiceSystem
             }
         }
 
-        public clsInvoice(DateTime dateInvoiceDate, int iTotalCost, List<clsItem> lItems)
+        public clsInvoice(DateTime dateInvoiceDate, int iTotalCost, ObservableCollection<clsItem> lItems)
         {
             this.dateInvoiceDate = dateInvoiceDate;
             this.iTotalCost = iTotalCost;
             this.lItems = lItems;
         }
 
-        public clsInvoice(int iInvoiceNumber, DateTime dateInvoiceDate, int iTotalCost, List<clsItem> lItems)
+        public clsInvoice(int iInvoiceNumber, DateTime dateInvoiceDate, int iTotalCost, ObservableCollection<clsItem> lItems)
         {
             this.iInvoiceNumber = iInvoiceNumber;
             this.dateInvoiceDate = dateInvoiceDate;
@@ -53,12 +53,12 @@ namespace CS3280InvoiceSystem
         {
             this.iInvoiceNumber = iInvoiceNumber;
             this.iTotalCost = 0;
-            this.lItems = new List<clsItem>();
+            this.lItems = new ObservableCollection<clsItem>();
         }
 
         public int IInvoiceNumber { get => iInvoiceNumber; set => iInvoiceNumber = value; }
         public DateTime DateInvoiceDate { get => dateInvoiceDate; set => dateInvoiceDate = value; }
         public int ITotalCost { get => iTotalCost; set => iTotalCost = value; }
-        internal List<clsItem> LItems { get => lItems; set => lItems = value; }
+        internal ObservableCollection<clsItem> LItems { get => lItems; set => lItems = value; }
     }
 }

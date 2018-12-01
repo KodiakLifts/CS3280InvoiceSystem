@@ -20,10 +20,6 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         private ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
         /// <summary>
-        /// A list of the item descriptions on current invoice
-        /// </summary>
-        ObservableCollection<string> lInvoiceItems = new ObservableCollection<string>();
-        /// <summary>
         /// The current invoice being edited
         /// </summary>
         int iCurrentInvoice;
@@ -43,26 +39,14 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         public clsMainLogic()
         {
-            LItems = oSQL.getItems();
+            lItems = oSQL.getItems();
         }
 
-        public ObservableCollection<string> fillInvoiceItems(int invoiceId)
-        {
-            foreach (var item in oSQL.getInvoiceItems(invoiceId))
-            {
-                LInvoiceItems.Add(item.SItemDesc);
-            }
-            return LInvoiceItems;
-        }
 
         /// <summary>
         /// Property to get and set the list of items
         /// </summary>
         public ObservableCollection<clsItem> LItems { get => lItems; set => lItems = value; }
-        /// <summary>
-        /// property to get and set the list of item descriptions on current invoice
-        /// </summary>
-        public ObservableCollection<string> LInvoiceItems { get => lInvoiceItems; set => lInvoiceItems = value; }
         /// <summary>
         /// property to get and set the current invoice number
         /// </summary>
@@ -117,6 +101,11 @@ namespace CS3280InvoiceSystem.Main
                     //Delete item from invoice
                     oInvoice.LItems.Remove(selectedItem);
                     return;
+        }
+
+        public void addInvoiceToDB()
+        {
+            oSQL.updateDataBase(oInvoice);
         }
 
         #endregion

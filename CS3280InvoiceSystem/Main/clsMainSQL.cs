@@ -93,7 +93,7 @@ namespace CS3280InvoiceSystem.Main
             //Add New Invoice
             db.ExecuteNonQuery("INSERT INTO Invoices VALUES ("
                 + oInvoice.IInvoiceNumber + ","
-                + oInvoice.DateInvoiceDate + ","
+                + oInvoice.DateInvoiceDate.ToShortDateString() + ","
                 + oInvoice.ITotalCost + ")");
             //Add All New Line Items
             foreach (var item in oInvoice.LItems)

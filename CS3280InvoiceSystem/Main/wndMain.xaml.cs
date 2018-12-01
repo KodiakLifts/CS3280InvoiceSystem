@@ -43,7 +43,7 @@ namespace CS3280InvoiceSystem.Main
         #endregion
 
 
-        #region Methods
+        #region METHODS
         /// <summary>
         /// Loads up the main Window
         /// </summary>
@@ -95,6 +95,7 @@ namespace CS3280InvoiceSystem.Main
         }
 
 
+        #region ITEMS
         /// <summary>
         /// Displays the cost of the item selected in the combo box
         /// </summary>
@@ -102,13 +103,7 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void cbItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var item in oMainLogic.LItems)
-            {
-                if (cbItems.SelectedItem.ToString() == item.SItemDesc)
-                {
-                    txtCost.Text = item.ICost.ToString();
-                }
-            }
+            txtCost.Text = ((clsItem)cbItems.SelectedItem).ICost.ToString();
         }
 
         /// <summary>
@@ -121,7 +116,7 @@ namespace CS3280InvoiceSystem.Main
             //add the item from the combobox to the invoice
             if (cbItems.SelectedItem != null)
             {
-                clsItem selectedItem = (clsItem)cbItems.SelectedItem;
+                clsItem selectedItem = new clsItem((clsItem)cbItems.SelectedItem);
                 oMainLogic.addItem(selectedItem);
                 resetUI();
             }
@@ -143,8 +138,10 @@ namespace CS3280InvoiceSystem.Main
                 resetUI();
             }
         }
+        #endregion
 
 
+        #region INVOICE
         /// <summary>
         /// Creates a new Invoice. 
         /// </summary>
@@ -175,25 +172,19 @@ namespace CS3280InvoiceSystem.Main
         {
             if (dateInvoiceDate.SelectedDate != null && txtTotalCost.Text != "0")
             {
-                MessageBox.Show("good");
-                //    DateTime InvoiceDate = dateInvoiceDate.SelectedDate.Value.Date;
-                //    int iTotalCost = -1;Int32.Parse(txtTotalCost.Text);
-                //    ObservableCollection<clsItem> lItems = new ObservableCollection<clsItem>();
-                //    //Get List of items in invoice
-                //    foreach (var item in dgItemList.Items)
-                //    {
-                //        lItems.Add((clsItem)item);
-                //    }
-                //    //Create Invoice Object with new Information
-                //    oMainLogic.OInvoice = new clsInvoice(iCurrentInvoice, InvoiceDate, iTotalCost, lItems);
+                MessageBox.Show("Invoice Created");
+                //Get date Value and update invoice date
+                DateTime InvoiceDate = dateInvoiceDate.SelectedDate.Value.Date;
+                oMainLogic.OInvoice.DateInvoiceDate = InvoiceDate;
 
-                //    //Update Database
-                //    oSQL.updateDataBase(oInvoice);
+                //Update Database
+                oMainLogic.addInvoiceToDB();
+
                 disableUI();
             }
             else
             {
-                MessageBox.Show("bad");
+                MessageBox.Show("Missing Invoice Info");
             }
         }
 
@@ -215,9 +206,10 @@ namespace CS3280InvoiceSystem.Main
             btnCreateInvoice.IsEnabled = true;
             txtInvoiceNumber.Text = "";
         }
+        #endregion
 
 
-        #region helperFunctions
+        #region SUPPORTFUNCTIONS
         /// <summary>
         /// Updates the UI and Invoice Information for new and old invoices.
         /// </summary>
@@ -233,11 +225,11 @@ namespace CS3280InvoiceSystem.Main
             //Populate the item combo box with item descriptions
             cbItems.ItemsSource =  oMainLogic.LItems;
             //Populate the delete items combo box from the database
-            //TODO populate based off of clsInvoice.
-            if(wndSearchForm.getSelectedInvoiceId() != -1)
-            {
-                cbDeleteItems.ItemsSource = oMainLogic.fillInvoiceItems(wndSearchForm.getSelectedInvoiceId());
-            }
+            ////TODO populate based off of clsInvoice.
+            //if(wndSearchForm.getSelectedInvoiceId() != -1)
+            //{
+            //    cbDeleteItems.ItemsSource = oMainLogic.fillInvoiceItems(wndSearchForm.getSelectedInvoiceId());
+            //}
             
 
             //Set text box values for invoice if it not a New Invoice being created

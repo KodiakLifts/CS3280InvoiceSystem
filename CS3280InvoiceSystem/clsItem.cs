@@ -24,6 +24,14 @@ namespace CS3280InvoiceSystem
             this.ICost = iCost;
         }
 
+        public clsItem(clsItem itemToCopy)
+        {
+            this.ILineItemNum = itemToCopy.iLineItemNum;
+            this.SItemCode = itemToCopy.sItemCode;
+            this.SItemDesc = itemToCopy.sItemDesc;
+            this.ICost = itemToCopy.iCost;
+        }
+
         public int ILineItemNum { get => iLineItemNum; set => iLineItemNum = value; }
         public string SItemCode { get => sItemCode; set => sItemCode = value; }
         public string SItemDesc { get => sItemDesc; set => sItemDesc = value; }

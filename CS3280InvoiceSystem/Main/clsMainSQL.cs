@@ -81,28 +81,60 @@ namespace CS3280InvoiceSystem.Main
         public void updateDataBase(clsInvoice oInvoice)
         {
             //Delete all Old line items
-            foreach (var item in oInvoice.LItems)
+            try
             {
-                db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
-                " AND LineItemNum = " + item.ILineItemNum);
+                foreach (var item in oInvoice.LItems)
+                {
+                    db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
+                    " AND LineItemNum = " + item.ILineItemNum);
+                }
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Failed to delete all old line items.");
             }
+
             //Delete Old Invoice
-            db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
+            try
+            {
+                db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
                 + oInvoice.IInvoiceNumber);
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Failed to delete old invoice.");
+            }
+
 
             //Add New Invoice
-            db.ExecuteNonQuery("INSERT INTO Invoices VALUES ("
-                + oInvoice.IInvoiceNumber + ","
-                + oInvoice.DateInvoiceDate.ToShortDateString() + ","
-                + oInvoice.ITotalCost + ")");
-            //Add All New Line Items
-            foreach (var item in oInvoice.LItems)
+            //TODO!!!
+            //The syntax for adding an invoice should be this:
+            // INSERT INTO Invoices(InvoiceDate, TotalCost) VALUES(#12/01/2018#, 60);
+            // I don't know why it isn't working, even when run from within Access.
+            try
             {
-                db.ExecuteNonQuery("INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" +
-                    oInvoice.IInvoiceNumber + "," + item.ILineItemNum + "," + item.SItemCode +
-                    ")");
-
+                db.ExecuteNonQuery("INSERT INTO Invoices(InvoiceDate, TotalCost) VALUES (#"
+                + oInvoice.DateInvoiceDate.ToShortDateString() + "#, "
+                + oInvoice.ITotalCost + ")");
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Failed to add new invoice.");
             }
+
+            //Add All New Line Items
+            try
+            {
+
+                foreach (var item in oInvoice.LItems)
+                {
+                    db.ExecuteNonQuery("INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" +
+                        oInvoice.IInvoiceNumber + ", " + item.ILineItemNum + ", '" + item.SItemCode.ToString() +
+                        "')");
+
+                }
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Failed to add new line items.");
+            }
+            
         }
 
         public void deleteInvoice(clsInvoice oInvoice)

@@ -30,7 +30,7 @@
             <Button x:Name="btnDeleteInvoice" Content="Delete Invoice" Margin="0, 4" IsEnabled="False" Click="btnDeleteInvoice_Click"/>
         </StackPanel>
         <Button x:Name="btnAddItem" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Width="293"  Height="25" Grid.Column="2" Margin="0,202,0,-55" Grid.Row="1" Click="btnAddItem_Click"/>
-        <Button x:Name="btnDeleteItem" IsEnabled="False" Content="Delete Item" HorizontalAlignment="Left" Margin="160,256,0,-109" Grid.Row="1" VerticalAlignment="Top" Width="134" Height="25" Grid.Column="2" Click="btnDeleteItem_Click"/>
+        <Button x:Name="btnDeleteItem" IsEnabled="False" Content="Delete Item" HorizontalAlignment="Left" Margin="0,247,0,-100" Grid.Row="1" VerticalAlignment="Top" Width="293" Height="25" Grid.Column="2" Click="btnDeleteItem_Click"/>
         <GroupBox x:Name="gbInvoiceInfo" Grid.Column="1" Header="Invoice Information"  Height="194" Grid.Row="1" VerticalAlignment="Top" Margin="10,25,24,-47">
             <WrapPanel Margin="10,0,0,0">
                 <Label x:Name="lblInvoiceNumber" Content="Invoice Number:" Width="127" Margin="0,5"/>
@@ -48,7 +48,6 @@
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
-        <ComboBox x:Name="cbDeleteItems" Grid.Column="2" HorizontalAlignment="Left" Height="22" Margin="0,259,0,-109" Grid.Row="1" VerticalAlignment="Top" Width="152"/>
         <Label x:Name="lblCost" Content="Cost:" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="167,165,0,-16" Grid.Row="1" VerticalAlignment="Top"/>
     </Grid>
 </Window>

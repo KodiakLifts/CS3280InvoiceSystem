@@ -80,6 +80,7 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="oInvoice"></param>
         public void updateDataBase(clsInvoice oInvoice)
         {
+            Console.WriteLine("INUM: " + oInvoice.IInvoiceNumber);
             //Delete all Old line items
             try
             {
@@ -91,6 +92,7 @@ namespace CS3280InvoiceSystem.Main
             }catch(Exception ex)
             {
                 Console.WriteLine("Failed to delete all old line items.");
+                throw (ex);
             }
 
             //Delete Old Invoice
@@ -101,22 +103,22 @@ namespace CS3280InvoiceSystem.Main
             }catch(Exception ex)
             {
                 Console.WriteLine("Failed to delete old invoice.");
+                throw (ex);
             }
 
 
             //Add New Invoice
-            //TODO!!!
-            //The syntax for adding an invoice should be this:
-            // INSERT INTO Invoices(InvoiceDate, TotalCost) VALUES(#12/01/2018#, 60);
-            // I don't know why it isn't working, even when run from within Access.
             try
             {
                 db.ExecuteNonQuery("INSERT INTO Invoices(InvoiceDate, TotalCost) VALUES (#"
                 + oInvoice.DateInvoiceDate.ToShortDateString() + "#, "
                 + oInvoice.ITotalCost + ")");
-            }catch(Exception ex)
+
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine("Failed to add new invoice.");
+                throw (ex);
             }
 
             //Add All New Line Items
@@ -133,6 +135,7 @@ namespace CS3280InvoiceSystem.Main
             }catch(Exception ex)
             {
                 Console.WriteLine("Failed to add new line items.");
+                throw (ex);
             }
             
         }

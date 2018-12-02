@@ -17,7 +17,7 @@
             <RowDefinition Height="171"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.ColumnSpan="3" Height="20">
-            <Menu Height="20">
+            <Menu Height="33">
                 <MenuItem Name="miDefTable" Header="Definition Table" Cursor="Arrow" Click="miDefTable_Click" />
                 <MenuItem Name="miSearchInv" Header="Search Invoices" Click="miSearchInv_Click"/>
             </Menu>

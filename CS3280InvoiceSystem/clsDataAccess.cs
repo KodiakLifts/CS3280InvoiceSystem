@@ -19,8 +19,7 @@ using System.Reflection;
         /// </summary>
 		public clsDataAccess()
 		{
-        //Provider = Microsoft.Jet.OLEDB.4.0; Data Source = C:\Users\Wesle\Documents\GitHub\CS3280InvoiceSystem\CS3280InvoiceSystem\Invoice.mdb
-        //Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb
+        //Constructs path to db not in debug folder.
         string currentPath = Directory.GetCurrentDirectory().ToString();
         string actualPath = Directory.GetParent(Directory.GetParent(currentPath).ToString()) + "\\Invoice.mdb";
         sConnectionString = @"Provider = Microsoft.Jet.OLEDB.4.0; Data Source = " + actualPath;

@@ -105,6 +105,7 @@ namespace CS3280InvoiceSystem.Main
             try
             {
                 this.Hide();
+                wndSearchForm.updateSearchOptions();
                 wndSearchForm.ShowDialog();
                 //Populate the invoice with oldInvoice
                 if (wndSearchForm.getSelectedInvoiceId() != -1)

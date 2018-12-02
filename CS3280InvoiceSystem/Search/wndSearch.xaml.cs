@@ -20,16 +20,19 @@ namespace CS3280InvoiceSystem.Search
     /// </summary>
     public partial class wndSearch : Window
     {
+        #region Class Members
         /// <summary>
         /// Used for accessing business logic.
         /// </summary>
-        clsSearchLogic logic;
+        private clsSearchLogic logic;
 
         /// <summary>
         /// Currently displayed invoice in the data grid.
         /// </summary>
-        int selectedInvoiceId;
+        private int selectedInvoiceId;
+        #endregion
 
+        #region Public Methods
         /// <summary>
         /// Constructor
         /// </summary>
@@ -61,6 +64,7 @@ namespace CS3280InvoiceSystem.Search
                 fill_cbInvoiceNumber(logic.getInvoiceNumbers());
                 fill_cbInvoiceDate(logic.getInvoiceDates());
                 fill_cbInvoiceTotalCharge(logic.getInvoiceTotalCharges());
+                initializeDataGrid();
             }
             catch (Exception ex)
             {
@@ -68,7 +72,9 @@ namespace CS3280InvoiceSystem.Search
                     MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
+        #endregion
 
+        #region Private Methods
         /// <summary>
         /// Fill boxes when window is shown.
         /// </summary>
@@ -321,6 +327,6 @@ namespace CS3280InvoiceSystem.Search
                 System.IO.File.AppendAllText(@"C:\Error.txt", Environment.NewLine + "HandleError Exception: " + ex.Message);
             }
         }
-
+        #endregion
     }
 }

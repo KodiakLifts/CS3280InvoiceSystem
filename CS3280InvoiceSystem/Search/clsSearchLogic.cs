@@ -12,19 +12,22 @@ namespace CS3280InvoiceSystem.Search
     /// </summary>
     class clsSearchLogic
     {
+        #region Class Members
         /// <summary>
         /// SQL class for executing queries to database.
         /// </summary>
-        clsSearchSQL sql;
+        private clsSearchSQL sql;
         /// <summary>
         /// Tells whether a single invoice is the result of the searchInvoices query.
         /// </summary>
-        bool invoiceFound;
+        private bool invoiceFound;
         /// <summary>
         /// If single invoice found stored here.
         /// </summary>
-        int selectedInvoiceId;
+        private int selectedInvoiceId;
+        #endregion
 
+        #region Public Methods
         public clsSearchLogic()
         {
             sql = new clsSearchSQL();
@@ -223,4 +226,5 @@ namespace CS3280InvoiceSystem.Search
             }
         }
     }
+    #endregion
 }

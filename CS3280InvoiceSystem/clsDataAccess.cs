@@ -19,7 +19,9 @@ using System.Reflection;
         /// </summary>
 		public clsDataAccess()
 		{
-            sConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
+        //Provider = Microsoft.Jet.OLEDB.4.0; Data Source = C:\Users\Wesle\Documents\GitHub\CS3280InvoiceSystem\CS3280InvoiceSystem\Invoice.mdb
+        //Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb
+        sConnectionString = @"Provider = Microsoft.Jet.OLEDB.4.0; Data Source = C:\Users\Wesle\Documents\GitHub\CS3280InvoiceSystem\CS3280InvoiceSystem\Invoice.mdb";
 		}
 
         /// <summary>

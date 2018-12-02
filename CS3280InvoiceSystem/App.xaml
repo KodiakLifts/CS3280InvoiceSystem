@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:CS3280InvoiceSystem"
              StartupUri="./Main/wndMain.xaml">
     <Application.Resources>
-        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="BureauBlue.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

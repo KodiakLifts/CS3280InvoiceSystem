@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,6 +41,10 @@ namespace CS3280InvoiceSystem.Main
         /// Tells whether it is a new invoice being created or an old one being selected
         /// </summary>
         bool bIsNewInvoice;
+        /// <summary>
+        /// If the edit invoice button is clicked
+        /// </summary>
+        bool bIsEditInvoice = false;
         #endregion
 
 
@@ -49,14 +54,22 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         public wndMain()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            //allow application to close
-            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-            //Instantiate Window Objects
-            wndItemsForm = new wndItems();
-            wndSearchForm = new wndSearch();
-            oMainLogic = new clsMainLogic();
+                //allow application to close
+                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                //Instantiate Window Objects
+                wndItemsForm = new wndItems();
+                wndSearchForm = new wndSearch();
+                oMainLogic = new clsMainLogic();
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -67,9 +80,17 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void miDefTable_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            wndItemsForm.ShowDialog();
-            this.Show();
+            try
+            {
+                this.Hide();
+                wndItemsForm.ShowDialog();
+                this.Show();
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -81,18 +102,26 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void miSearchInv_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            wndSearchForm.ShowDialog();
-            //Populate the invoice with oldInvoice
-            if (wndSearchForm.getSelectedInvoiceId() != -1)
+            try
             {
-                bIsNewInvoice = false;
-                updateUI();
-            }
-            disableUI();
+                this.Hide();
+                wndSearchForm.ShowDialog();
+                //Populate the invoice with oldInvoice
+                if (wndSearchForm.getSelectedInvoiceId() != -1)
+                {
+                    bIsNewInvoice = false;
+                    updateUI();
+                }
+                disableUI();
 
-            //Finished retreive
-            this.Show();
+                //Finished retreive
+                this.Show();
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
 
@@ -104,7 +133,15 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void cbItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            txtCost.Text = ((clsItem)cbItems.SelectedItem).ICost.ToString();
+            try
+            {
+                txtCost.Text = ((clsItem)cbItems.SelectedItem).ICost.ToString();
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -114,12 +151,20 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnAddItem_Click(object sender, RoutedEventArgs e)
         {
-            //add the item from the combobox to the invoice
-            if (cbItems.SelectedItem != null)
+            try
             {
-                clsItem selectedItem = new clsItem((clsItem)cbItems.SelectedItem);
-                oMainLogic.addItem(selectedItem);
-                resetUI();
+                //add the item from the combobox to the invoice
+                if (cbItems.SelectedItem != null)
+                {
+                    clsItem selectedItem = new clsItem((clsItem)cbItems.SelectedItem);
+                    oMainLogic.addItem(selectedItem);
+                    resetUI();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -130,13 +175,21 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnDeleteItem_Click(object sender, RoutedEventArgs e)
         {
-            //Delete the item from the combobox and the invoice
-            if (dgItemList.SelectedCells != null && dgItemList.SelectedIndex != -1)
+            try
             {
-                var currentRowIndex = dgItemList.SelectedIndex;
-                clsItem selectedItem = ((clsItem)dgItemList.SelectedCells[currentRowIndex].Item);
-                oMainLogic.deleteItem(selectedItem);
-                resetUI();
+                //Delete the item from the combobox and the invoice
+                if (dgItemList.SelectedCells != null && dgItemList.SelectedIndex != -1)
+                {
+                    var currentRowIndex = dgItemList.SelectedIndex;
+                    clsItem selectedItem = ((clsItem)dgItemList.SelectedCells[currentRowIndex].Item);
+                    oMainLogic.deleteItem(selectedItem);
+                    resetUI();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -150,8 +203,16 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnCreateInvoice_Click(object sender, RoutedEventArgs e)
         {
-            bIsNewInvoice = true;
-            updateUI();
+            try
+            {
+                bIsNewInvoice = true;
+                updateUI();
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -161,7 +222,16 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnEditInvoice_Click(object sender, RoutedEventArgs e)
         {
-            enableUI();
+            try
+            {
+                enableUI();
+                bIsEditInvoice = true;
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -171,21 +241,37 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnSaveInvoice_Click(object sender, RoutedEventArgs e)
         {
-            if (dateInvoiceDate.SelectedDate != null && txtTotalCost.Text != "0")
+            try
             {
-                MessageBox.Show("Invoice Created");
-                //Get date Value and update invoice date
-                DateTime InvoiceDate = dateInvoiceDate.SelectedDate.Value.Date;
-                oMainLogic.OInvoice.DateInvoiceDate = InvoiceDate;
+                if (dateInvoiceDate.SelectedDate != null && txtTotalCost.Text != "0")
+                {
+                    MessageBox.Show("Invoice Created");
+                    //Get date Value and update invoice date
+                    DateTime InvoiceDate = dateInvoiceDate.SelectedDate.Value.Date;
+                    oMainLogic.OInvoice.DateInvoiceDate = InvoiceDate;
 
-                //Update Database
-                oMainLogic.addInvoiceToDB();
+                    if (bIsEditInvoice)
+                    {
+                        //update invoice in db
+                        oMainLogic.updateInvoiceFromDB();
+                    }
+                    else
+                    {
+                        //Add invoice to Database
+                        oMainLogic.addInvoiceToDB();
+                    }
 
-                disableUI();
+                    disableUI();
+                }
+                else
+                {
+                    MessageBox.Show("Missing Invoice Info");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Missing Invoice Info");
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -196,16 +282,24 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="e"></param>
         private void btnDeleteInvoice_Click(object sender, RoutedEventArgs e)
         {
-            ////delete object from database
-            oMainLogic.delInvoiceFromDB();
+            try
+            {
+                ////delete object from database
+                oMainLogic.delInvoiceFromDB();
 
-            //reset ui
-            bIsNewInvoice = true;
-            updateUI();
-            btnEditInvoice.IsEnabled = false;
-            btnDeleteInvoice.IsEnabled = false;
-            btnCreateInvoice.IsEnabled = true;
-            txtInvoiceNumber.Text = "";
+                //reset ui
+                bIsNewInvoice = true;
+                updateUI();
+                btnEditInvoice.IsEnabled = false;
+                btnDeleteInvoice.IsEnabled = false;
+                btnCreateInvoice.IsEnabled = true;
+                txtInvoiceNumber.Text = "";
+            }
+            catch (Exception ex)
+            {
+                HandleError.handleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
         #endregion
 
@@ -220,24 +314,33 @@ namespace CS3280InvoiceSystem.Main
         /// <param name="pItemCode"></param>
         void updateUI()
         {
-            //Enable Editing for Invoice
-            enableUI();
-
-            //Populate the item combo box with item descriptions
-            cbItems.ItemsSource = oMainLogic.LItems;
-
-            //Set text box values for invoice if it not a New Invoice being created
-            if (!bIsNewInvoice)
+            try
             {
-                oMainLogic.updateOldInvoice(wndSearchForm.getSelectedInvoiceId());
-            }
-            else
-            {
-                oMainLogic.updateNewInvoice();
-            }
+                //Enable Editing for Invoice
+                enableUI();
 
-            //Fill UI
-            resetUI();
+                //Populate the item combo box with item descriptions
+                cbItems.ItemsSource = oMainLogic.LItems;
+
+                //Set text box values for invoice if it not a New Invoice being created
+                if (!bIsNewInvoice)
+                {
+                    oMainLogic.updateOldInvoice(wndSearchForm.getSelectedInvoiceId());
+                }
+                else
+                {
+                    oMainLogic.updateNewInvoice();
+                }
+
+                //Fill UI
+                resetUI();
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -245,23 +348,32 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         void resetUI()
         {
-            //Set the invoice textbox to the current invoice number
-            txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
-
-            //Set or reset invoice date picker
-            if (!bIsNewInvoice)
+            try
             {
-                dateInvoiceDate.SelectedDate = oMainLogic.OInvoice.DateInvoiceDate;
-            }
-            else
-            {
-                dateInvoiceDate.SelectedDate = null;
-            }
+                //Set the invoice textbox to the current invoice number
+                txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
 
-            //update total cost text box
-            txtTotalCost.Text = oMainLogic.OInvoice.ITotalCost.ToString();
-            //Populate datagrid with items and prices
-            dgItemList.ItemsSource = oMainLogic.OInvoice.LItems;
+                //Set or reset invoice date picker
+                if (!bIsNewInvoice)
+                {
+                    dateInvoiceDate.SelectedDate = oMainLogic.OInvoice.DateInvoiceDate;
+                }
+                else
+                {
+                    dateInvoiceDate.SelectedDate = null;
+                }
+
+                //update total cost text box
+                txtTotalCost.Text = oMainLogic.OInvoice.ITotalCost.ToString();
+                //Populate datagrid with items and prices
+                dgItemList.ItemsSource = oMainLogic.OInvoice.LItems;
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -269,15 +381,24 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         void enableUI()
         {
-            btnSaveInvoice.IsEnabled = true;
-            cbItems.IsEnabled = true;
-            dateInvoiceDate.IsEnabled = true;
-            btnAddItem.IsEnabled = true;
-            btnDeleteItem.IsEnabled = true;
-            cbItems.IsEnabled = true;
+            try
+            {
+                btnSaveInvoice.IsEnabled = true;
+                cbItems.IsEnabled = true;
+                dateInvoiceDate.IsEnabled = true;
+                btnAddItem.IsEnabled = true;
+                btnDeleteItem.IsEnabled = true;
+                cbItems.IsEnabled = true;
 
-            btnEditInvoice.IsEnabled = false;
-            btnDeleteInvoice.IsEnabled = false;
+                btnEditInvoice.IsEnabled = false;
+                btnDeleteInvoice.IsEnabled = false;
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -285,16 +406,25 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         void disableUI()
         {
-            btnSaveInvoice.IsEnabled = false;
-            cbItems.IsEnabled = false;
-            dateInvoiceDate.IsEnabled = false;
-            btnAddItem.IsEnabled = false;
-            btnDeleteItem.IsEnabled = false;
-            btnCreateInvoice.IsEnabled = true;
-            cbItems.IsEnabled = false;
+            try
+            {
+                btnSaveInvoice.IsEnabled = false;
+                cbItems.IsEnabled = false;
+                dateInvoiceDate.IsEnabled = false;
+                btnAddItem.IsEnabled = false;
+                btnDeleteItem.IsEnabled = false;
+                btnCreateInvoice.IsEnabled = true;
+                cbItems.IsEnabled = false;
 
-            btnEditInvoice.IsEnabled = true;
-            btnDeleteInvoice.IsEnabled = true;
+                btnEditInvoice.IsEnabled = true;
+                btnDeleteInvoice.IsEnabled = true;
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         #endregion
         #endregion

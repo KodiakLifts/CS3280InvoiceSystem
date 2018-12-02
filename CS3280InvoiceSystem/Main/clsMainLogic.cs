@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +40,16 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         public clsMainLogic()
         {
-            lItems = oSQL.getItems();
+            try
+            {
+                lItems = oSQL.getItems();
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 
@@ -62,22 +72,47 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         public void updateOldInvoice(int pCurrentInvoice)
         {
-            iCurrentInvoice = pCurrentInvoice;
-            oInvoice = oSQL.getInvoiceInfo(iCurrentInvoice);
-            iLineItemNumber = oInvoice.LItems.Count();
+            try
+            {
+                iCurrentInvoice = pCurrentInvoice;
+                oInvoice = oSQL.getInvoiceInfo(iCurrentInvoice);
+                iLineItemNumber = oInvoice.LItems.Count();
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
+
         /// <summary>
         /// Updates the invoice with all the new invoice information
         /// </summary>
         public void updateNewInvoice()
         {
-            iCurrentInvoice = oSQL.getMaxInvoice();
-            oInvoice = new clsInvoice(ICurrentInvoice);
-            iLineItemNumber = 0;
+            try
+            {
+                iCurrentInvoice = oSQL.getMaxInvoice();
+                oInvoice = new clsInvoice(ICurrentInvoice);
+                iLineItemNumber = 0;
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Adds an item to the the current invoice
+        /// </summary>
+        /// <param name="oSelectedItem"></param>
         public void addItem(clsItem oSelectedItem)
         {
+            try
+            {
                 //incrimient and set the line item number
                 iLineItemNumber++;
 
@@ -92,27 +127,87 @@ namespace CS3280InvoiceSystem.Main
                 oInvoice.ITotalCost += oSelectedItem.ICost;
                 //set the items lineitemnumber to the current lineitemnumber
                 oInvoice.LItems[oInvoice.LItems.Count - 1].ILineItemNum = iLineItemNumber;
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
+        /// <summary>
+        /// deletes an item from the current invoice
+        /// </summary>
+        /// <param name="selectedItem"></param>
         public void deleteItem(clsItem selectedItem)
         {
-                    //set the total cost to the calculated total cost
-                    oInvoice.ITotalCost -= selectedItem.ICost;
-                    //Delete item from invoice
-                    oInvoice.LItems.Remove(selectedItem);
-                    return;
+            try
+            {
+                //set the total cost to the calculated total cost
+                oInvoice.ITotalCost -= selectedItem.ICost;
+                //Delete item from invoice
+                oInvoice.LItems.Remove(selectedItem);
+                return;
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
+        /// <summary>
+        /// adds the current invoice to the DB
+        /// </summary>
         public void addInvoiceToDB()
         {
-            oSQL.updateDataBase(oInvoice);
+            try
+            {
+                oSQL.addNewInvoiceToDB(oInvoice);
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Deletes the current invoice from the DB
+        /// </summary>
         public void delInvoiceFromDB()
         {
-            oSQL.deleteInvoice(oInvoice);
+            try
+            {
+                oSQL.deleteInvoice(oInvoice);
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Updates the current invoice in the DB
+        /// </summary>
+        public void updateInvoiceFromDB()
+        {
+            try
+            {
+                oSQL.editInvoiceFromDB(oInvoice);
+            }
+            catch (System.Exception ex)
+            {
+                //Just throw the exception
+                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
         #endregion
     }
 }

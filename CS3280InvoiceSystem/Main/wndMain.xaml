@@ -48,7 +48,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <Label x:Name="lblCost" Content="Cost:" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="167,165,0,-16" Grid.Row="1" VerticalAlignment="Top"/>
+        <Label x:Name="lblCost" Content="Cost:" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="171,170,0,-21" Grid.Row="1" VerticalAlignment="Top"/>
     </Grid>
 </Window>
     

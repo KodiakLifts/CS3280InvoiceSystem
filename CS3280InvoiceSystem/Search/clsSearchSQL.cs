@@ -12,11 +12,14 @@ namespace CS3280InvoiceSystem.Search
     /// </summary>
     class clsSearchSQL
     {
+        #region Class Members
         /// <summary>
         /// Used to access database.
         /// </summary>
         clsDataAccess db;
+        #endregion
 
+        #region Public Methods
         public clsSearchSQL()
         {
             db = new clsDataAccess();
@@ -177,4 +180,5 @@ namespace CS3280InvoiceSystem.Search
         }
    
     }
+    #endregion
 }

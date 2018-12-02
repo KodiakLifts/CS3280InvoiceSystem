@@ -205,6 +205,7 @@ namespace CS3280InvoiceSystem.Main
         {
             try
             {
+                bIsEditInvoice = false;
                 bIsNewInvoice = true;
                 updateUI();
             }
@@ -259,6 +260,8 @@ namespace CS3280InvoiceSystem.Main
                     {
                         //Add invoice to Database
                         oMainLogic.addInvoiceToDB();
+                        //update the invoice number
+                        txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
                     }
 
                     disableUI();
@@ -286,8 +289,10 @@ namespace CS3280InvoiceSystem.Main
             {
                 ////delete object from database
                 oMainLogic.delInvoiceFromDB();
+                MessageBox.Show("Invoice Deleted!");
 
                 //reset ui
+                dateInvoiceDate.SelectedDate = null;
                 bIsNewInvoice = true;
                 updateUI();
                 btnEditInvoice.IsEnabled = false;
@@ -350,17 +355,17 @@ namespace CS3280InvoiceSystem.Main
         {
             try
             {
-                //Set the invoice textbox to the current invoice number
-                txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
-
                 //Set or reset invoice date picker
                 if (!bIsNewInvoice)
                 {
+                    //Set the invoice textbox to the current invoice number
+                    txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
+                    //set the selected date
                     dateInvoiceDate.SelectedDate = oMainLogic.OInvoice.DateInvoiceDate;
                 }
                 else
                 {
-                    dateInvoiceDate.SelectedDate = null;
+                    txtInvoiceNumber.Text = "TBD";
                 }
 
                 //update total cost text box
@@ -427,6 +432,12 @@ namespace CS3280InvoiceSystem.Main
             }
         }
         #endregion
+
         #endregion
+
+        private void dgItemList_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
+        }
     }
 }

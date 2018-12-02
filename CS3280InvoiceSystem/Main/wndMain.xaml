@@ -42,12 +42,12 @@
                 <Button x:Name="btnSaveInvoice" IsEnabled="False" Content="Save Invoice" Width="75" Click="btnSaveInvoice_Click"/>
             </WrapPanel>
         </GroupBox>
-        <StackPanel Grid.Column="2" Margin="0,33,51,10" Grid.Row="1">
+        <DockPanel Grid.Column="2" Margin="0,33,51,10" Grid.Row="1">
             <DataGrid x:Name="dgItemList" MinHeight="125" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" CanUserSortColumns="False">
                 <DataGrid.Columns>
                 </DataGrid.Columns>
             </DataGrid>
-        </StackPanel>
+        </DockPanel>
         <Label x:Name="lblCost" Content="Cost:" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="167,165,0,-16" Grid.Row="1" VerticalAlignment="Top"/>
     </Grid>
 </Window>

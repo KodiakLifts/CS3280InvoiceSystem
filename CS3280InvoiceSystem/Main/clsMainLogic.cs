@@ -76,6 +76,7 @@ namespace CS3280InvoiceSystem.Main
             {
                 iCurrentInvoice = pCurrentInvoice;
                 oInvoice = oSQL.getInvoiceInfo(iCurrentInvoice);
+                oInvoice.LItems = oSQL.getInvoiceItems(ICurrentInvoice);
                 iLineItemNumber = oInvoice.LItems.Count();
             }
             catch (System.Exception ex)
@@ -93,7 +94,6 @@ namespace CS3280InvoiceSystem.Main
         {
             try
             {
-                iCurrentInvoice = oSQL.getMaxInvoice();
                 oInvoice = new clsInvoice(ICurrentInvoice);
                 iLineItemNumber = 0;
             }
@@ -165,7 +165,8 @@ namespace CS3280InvoiceSystem.Main
         {
             try
             {
-                oSQL.addNewInvoiceToDB(oInvoice);
+                int iNewInvoiceNumber = oSQL.addNewInvoiceToDB(oInvoice);
+                oInvoice.IInvoiceNumber = iNewInvoiceNumber;
             }
             catch (System.Exception ex)
             {

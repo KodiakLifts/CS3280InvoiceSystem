@@ -30,37 +30,6 @@ namespace CS3280InvoiceSystem.Main
 
 
         /// <summary>
-        /// returns a table with the items and their prices for a specific invoice
-        /// </summary>
-        /// <param name="pInvoiceNumber"></param>
-        /// <returns></returns>
-        public DataTable getItemsAndPrices(int pInvoiceNumber)
-        {
-            try
-            {
-                //Local Variables
-                DataSet ds;
-                DataTable dt = new DataTable();
-                iRet = 0;
-                sSqlStatement = @"SELECT LineItemNum, LineItems.ItemCode, ItemDesc.ItemDesc, Cost
-                FROM ItemDesc
-                INNER JOIN LineItems ON LineItems.ItemCode = ItemDesc.ItemCode
-                WHERE LineItems.InvoiceNum = " + pInvoiceNumber;
-
-
-                //query the database for the items and prices
-                ds = db.ExecuteSQLStatement(sSqlStatement, ref iRet);
-                return ds.Tables[0];
-            }
-            catch (System.Exception ex)
-            {
-                //Just throw the exception
-                throw new System.Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-        }
-
-        /// <summary>
         /// returns a table with all the invoice information
         /// </summary>
         /// <param name="pInvoiceNumber"></param>
@@ -146,7 +115,7 @@ namespace CS3280InvoiceSystem.Main
         }
 
         /// <summary>
-        /// Gets all the invoice items
+        /// Gets all the items in an invoice
         /// </summary>
         /// <param name="invoiceId"></param>
         /// <returns></returns>
@@ -184,7 +153,7 @@ namespace CS3280InvoiceSystem.Main
         /// Updates the Database With the new Invoice And Lineitem data
         /// </summary>
         /// <param name="oInvoice"></param>
-        public void addNewInvoiceToDB(clsInvoice oInvoice)
+        public int addNewInvoiceToDB(clsInvoice oInvoice)
         {
             //Add New Invoice
             try
@@ -213,6 +182,8 @@ namespace CS3280InvoiceSystem.Main
                        iInvoiceNumber + ", " + item.ILineItemNum + ", '" + item.SItemCode.ToString() +
                         "')");
                 }
+                //return the new invoice number
+                return iInvoiceNumber;
             }
             catch (Exception ex)
             {

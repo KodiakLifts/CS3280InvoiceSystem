@@ -65,6 +65,7 @@ namespace CS3280InvoiceSystem.Search
                 fill_cbInvoiceDate(logic.getInvoiceDates());
                 fill_cbInvoiceTotalCharge(logic.getInvoiceTotalCharges());
                 initializeDataGrid();
+                btnSelectInvoice.IsEnabled = false;
             }
             catch (Exception ex)
             {

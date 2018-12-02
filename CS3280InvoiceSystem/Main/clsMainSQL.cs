@@ -74,84 +74,6 @@ namespace CS3280InvoiceSystem.Main
             return Int32.Parse(ds.Tables[0].Rows[0][0].ToString()) +1;
         }
 
-        /// <summary>
-        /// Updates the Database With the new Invoice And Lineitem data
-        /// </summary>
-        /// <param name="oInvoice"></param>
-        public void updateDataBase(clsInvoice oInvoice)
-        {
-            Console.WriteLine("INUM: " + oInvoice.IInvoiceNumber);
-            //Delete all Old line items
-            try
-            {
-                foreach (var item in oInvoice.LItems)
-                {
-                    db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
-                    " AND LineItemNum = " + item.ILineItemNum);
-                }
-            }catch(Exception ex)
-            {
-                Console.WriteLine("Failed to delete all old line items.");
-                throw (ex);
-            }
-
-            //Delete Old Invoice
-            try
-            {
-                db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
-                + oInvoice.IInvoiceNumber);
-            }catch(Exception ex)
-            {
-                Console.WriteLine("Failed to delete old invoice.");
-                throw (ex);
-            }
-
-
-            //Add New Invoice
-            try
-            {
-                db.ExecuteNonQuery("INSERT INTO Invoices(InvoiceDate, TotalCost) VALUES (#"
-                + oInvoice.DateInvoiceDate.ToShortDateString() + "#, "
-                + oInvoice.ITotalCost + ")");
-
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Failed to add new invoice.");
-                throw (ex);
-            }
-
-            //Add All New Line Items
-            try
-            {
-
-                foreach (var item in oInvoice.LItems)
-                {
-                    db.ExecuteNonQuery("INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" +
-                        oInvoice.IInvoiceNumber + ", " + item.ILineItemNum + ", '" + item.SItemCode.ToString() +
-                        "')");
-
-                }
-            }catch(Exception ex)
-            {
-                Console.WriteLine("Failed to add new line items.");
-                throw (ex);
-            }
-            
-        }
-
-        public void deleteInvoice(clsInvoice oInvoice)
-        {
-            //Delete all Old line items
-            foreach (var item in oInvoice.LItems)
-            {
-                db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
-                " AND LineItemNum = " + item.ILineItemNum);
-            }
-            //Delete Old Invoice
-            db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
-                + oInvoice.IInvoiceNumber);
-            }
 
         /// <summary>
         /// returns a list of all items in the database
@@ -193,6 +115,92 @@ namespace CS3280InvoiceSystem.Main
                 lItems.Add(oItem);
             }
             return lItems;
+        }
+
+
+        /// <summary>
+        /// Updates the Database With the new Invoice And Lineitem data
+        /// </summary>
+        /// <param name="oInvoice"></param>
+        public void updateDataBase(clsInvoice oInvoice)
+        {
+            Console.WriteLine("INUM: " + oInvoice.IInvoiceNumber);
+            //Delete all Old line items
+            try
+            {
+                foreach (var item in oInvoice.LItems)
+                {
+                    db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
+                    " AND LineItemNum = " + item.ILineItemNum);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to delete all old line items.");
+                throw (ex);
+            }
+
+            //Delete Old Invoice
+            try
+            {
+                db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
+                + oInvoice.IInvoiceNumber);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to delete old invoice.");
+                throw (ex);
+            }
+
+
+            //Add New Invoice
+            try
+            {
+                db.ExecuteNonQuery("INSERT INTO Invoices(InvoiceDate, TotalCost) VALUES ("
+                + oInvoice.DateInvoiceDate.ToShortDateString() + ", "
+                + oInvoice.ITotalCost + ")");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to add new invoice.");
+                throw (ex);
+            }
+
+            //Add All New Line Items
+            try
+            {
+
+                foreach (var item in oInvoice.LItems)
+                {
+                    db.ExecuteNonQuery("INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" +
+                        oInvoice.IInvoiceNumber + ", " + item.ILineItemNum + ", '" + item.SItemCode.ToString() +
+                        "')");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to add new line items.");
+                throw (ex);
+            }
+
+        }
+
+        /// <summary>
+        /// deletes the invoice
+        /// </summary>
+        /// <param name="oInvoice"></param>
+        public void deleteInvoice(clsInvoice oInvoice)
+        {
+            //Delete all Old line items
+            foreach (var item in oInvoice.LItems)
+            {
+                db.ExecuteNonQuery("DELETE FROM LineItems WHERE InvoiceNum = " + oInvoice.IInvoiceNumber +
+                " AND LineItemNum = " + item.ILineItemNum);
+            }
+            //Delete Old Invoice
+            db.ExecuteNonQuery("DELETE FROM Invoices WHERE InvoiceNum = "
+                + oInvoice.IInvoiceNumber);
         }
     }
 }

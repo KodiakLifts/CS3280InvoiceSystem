@@ -108,6 +108,11 @@ namespace CS3280InvoiceSystem.Main
             oSQL.updateDataBase(oInvoice);
         }
 
+        public void delInvoiceFromDB()
+        {
+            oSQL.deleteInvoice(oInvoice);
+        }
+
         #endregion
     }
 }

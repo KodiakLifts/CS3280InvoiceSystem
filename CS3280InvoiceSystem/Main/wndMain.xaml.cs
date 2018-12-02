@@ -84,12 +84,13 @@ namespace CS3280InvoiceSystem.Main
             this.Hide();
             wndSearchForm.ShowDialog();
             //Populate the invoice with oldInvoice
-            if(wndSearchForm.getSelectedInvoiceId() != -1)
+            if (wndSearchForm.getSelectedInvoiceId() != -1)
             {
                 bIsNewInvoice = false;
                 updateUI();
             }
-            
+            disableUI();
+
             //Finished retreive
             this.Show();
         }
@@ -121,7 +122,7 @@ namespace CS3280InvoiceSystem.Main
                 resetUI();
             }
         }
-     
+
         /// <summary>
         /// Delete the item selected in the datagrid
         /// </summary>
@@ -196,8 +197,8 @@ namespace CS3280InvoiceSystem.Main
         private void btnDeleteInvoice_Click(object sender, RoutedEventArgs e)
         {
             ////delete object from database
-            //oSQL.deleteInvoice(oMainLogic.OInvoice);
-            
+            oMainLogic.delInvoiceFromDB();
+
             //reset ui
             bIsNewInvoice = true;
             updateUI();
@@ -223,14 +224,7 @@ namespace CS3280InvoiceSystem.Main
             enableUI();
 
             //Populate the item combo box with item descriptions
-            cbItems.ItemsSource =  oMainLogic.LItems;
-            //Populate the delete items combo box from the database
-            ////TODO populate based off of clsInvoice.
-            //if(wndSearchForm.getSelectedInvoiceId() != -1)
-            //{
-            //    cbDeleteItems.ItemsSource = oMainLogic.fillInvoiceItems(wndSearchForm.getSelectedInvoiceId());
-            //}
-            
+            cbItems.ItemsSource = oMainLogic.LItems;
 
             //Set text box values for invoice if it not a New Invoice being created
             if (!bIsNewInvoice)
@@ -251,16 +245,21 @@ namespace CS3280InvoiceSystem.Main
         /// </summary>
         void resetUI()
         {
+            //Set the invoice textbox to the current invoice number
             txtInvoiceNumber.Text = oMainLogic.OInvoice.IInvoiceNumber.ToString();
-            if (oMainLogic.OInvoice.DateInvoiceDate.ToShortDateString() == "1/1/0001")
-            {
-                dateInvoiceDate.SelectedDate = null;
-            }
-            else
+
+            //Set or reset invoice date picker
+            if (!bIsNewInvoice)
             {
                 dateInvoiceDate.SelectedDate = oMainLogic.OInvoice.DateInvoiceDate;
             }
-                txtTotalCost.Text = oMainLogic.OInvoice.ITotalCost.ToString();
+            else
+            {
+                dateInvoiceDate.SelectedDate = null;
+            }
+
+            //update total cost text box
+            txtTotalCost.Text = oMainLogic.OInvoice.ITotalCost.ToString();
             //Populate datagrid with items and prices
             dgItemList.ItemsSource = oMainLogic.OInvoice.LItems;
         }
@@ -291,7 +290,7 @@ namespace CS3280InvoiceSystem.Main
             dateInvoiceDate.IsEnabled = false;
             btnAddItem.IsEnabled = false;
             btnDeleteItem.IsEnabled = false;
-            btnCreateInvoice.IsEnabled = false;
+            btnCreateInvoice.IsEnabled = true;
             cbItems.IsEnabled = false;
 
             btnEditInvoice.IsEnabled = true;

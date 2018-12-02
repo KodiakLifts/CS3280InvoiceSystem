@@ -137,7 +137,6 @@ namespace CS3280InvoiceSystem.Search
                     }
                 }
 
-                invoiceNumbers.Sort();
                 return invoiceNumbers;
 
             }
@@ -177,8 +176,6 @@ namespace CS3280InvoiceSystem.Search
                     }
                 }
 
-                invoiceDates.Sort();
-
                 return invoiceDates;
 
             }
@@ -215,8 +212,6 @@ namespace CS3280InvoiceSystem.Search
                         throw ex;
                     }
                 }
-
-                invoiceTotals.Sort();
 
                 return invoiceTotals;
             }

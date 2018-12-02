@@ -118,7 +118,7 @@ namespace CS3280InvoiceSystem.Search
                 int iRet = 0;
 
                 ds = db.ExecuteSQLStatement(
-                    "SELECT InvoiceNum FROM Invoices", ref iRet
+                    "SELECT InvoiceNum FROM Invoices ORDER BY InvoiceNum", ref iRet
                 );
 
                 return ds;
@@ -144,7 +144,7 @@ namespace CS3280InvoiceSystem.Search
                 
 
                 ds = db.ExecuteSQLStatement(
-                    "SELECT InvoiceDate FROM Invoices", ref iRet
+                    "SELECT DISTINCT InvoiceDate FROM Invoices ORDER BY InvoiceDate", ref iRet
                 );
 
                 return ds;
@@ -168,7 +168,7 @@ namespace CS3280InvoiceSystem.Search
                 int iRet = 0;
 
                 ds = db.ExecuteSQLStatement(
-                    "SELECT TotalCost FROM Invoices", ref iRet
+                    "SELECT DISTINCT TotalCost FROM Invoices ORDER BY TotalCost", ref iRet
                 );
 
                 return ds;
